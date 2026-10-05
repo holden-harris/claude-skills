@@ -1,0 +1,67 @@
+{
+  "skill_name": "code-audit",
+  "evals": [
+    {
+      "id": 1,
+      "name": "ecospacebasemap-review-only",
+      "prompt": "I'm in /home/user/EcospaceBasemap (an R repo that builds the Ecospace basemap grids; Dave wrote it, and my PR #1 that made the data setup portable was merged last month). Do a review-only pass over the whole repo: no GitHub writes, no commits, and R is not installed on this machine so don't try to run anything. I want the three review documents (the science and objectives review, the workflow review, and the log of findings, recommended changes and decisions) with file:line on every finding, the inputs/outputs/pipeline inventory, the stochasticity and run-time notes, and a decisions log skeleton. Write them into the outputs folder under docs/review/ and tell me which findings you would send to Dave rather than fix.",
+      "expected_output": "Three markdown documents under docs/review/ (science-review.md, workflow-review.md, issueN-<slug>-log.md) following the skill's templates, with the known EcospaceBasemap findings in the registers, scientific items routed to the author, run evidence marked pending, and no GitHub or git writes.",
+      "files": [],
+      "expectations": [
+        "Three documents exist under docs/review/ in the outputs: science-review.md, workflow-review.md, and a findings log named issue<N>-<slug>-log.md (N may be a placeholder)",
+        "science-review.md contains sections for Summary, Objectives, Introduction and context, Data sources, Scientific methods, Results, Discussion and References",
+        "workflow-review.md contains a stage table, a per-input section for the inputs, a statistical models section that states assumptions per model, a randomness section, a run-times section and a glossary",
+        "The findings log has a status block and eight findings registers labelled P, R, B, D, M, S, T and E, and every findings row carries a file:line reference",
+        "A finding states that .gitignore (around line 12) refers to cfg$out_root, which does not exist in the code (the real variable is dir.basemaps in make_WFS_basemaps.R)",
+        "A finding states that README.md (around line 688) says outputs land outside the repository while the driver's default dir.basemaps is inside it (output/<res>min)",
+        "A finding states that fn.make_dbseabed_ascii in R/dbSEABED_functions.R (around line 135) is never called",
+        "A finding states that terra::writeRaster in R/dbSEABED_functions.R (around line 290) lacks overwrite=TRUE, so a second run into an existing output folder fails",
+        "A finding states that marmap::getNOAA.bathy() in make_WFS_basemaps.R (around line 66) is a live web input that is outside the data manifest and has no cache or skip toggle",
+        "A finding states that the repository captures no software environment (no sessionInfo(), renv or package-version record)",
+        "A finding states that set.seed() is called inside a function in R/artificial_reef_functions.R (around line 262), which changes the session's global random state as a side effect",
+        "A finding states that which(reef$Relief > 0) and which(!(reef$Relief > 0)) in R/artificial_reef_functions.R (around lines 174-175) both exclude NA relief, so records with missing relief are dropped",
+        "A finding states that the kriging-to-IDW fallback in R/GFISHER functions.R (around lines 184-188 and 260-264) does not pass anchor.zero, strata or clamp.to.observed, so a failed fit silently runs with different settings",
+        "The relief-in-feet-treated-as-metres issue in the artificial reef stage is classified as a methods (M) finding routed to the author (status author or needs examination), and no change to the arithmetic is proposed",
+        "A finding states that the driver passes anchor.zero='both' (make_WFS_basemaps.R around line 179) without explanation while the function's documentation (R/GFISHER functions.R around lines 310-314) describes it as biasing the fill downward",
+        "The transcript contains no GitHub write (gh issue create, gh pr create, mcp__github__ write tools), no git commit and no git push, and no claim that R code was executed; the baseline and verification evidence is explicitly marked pending",
+        "The findings flag rm(list=ls()) at the top of make_WFS_basemaps.R and the unguarded plot() calls in the driver that produce Rplots.pdf under Rscript"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "redtidemaps-workflow-review",
+      "prompt": "Repo at /home/user/wfs-fem/redtidemaps (WFS-FEM/RedTideMaps, the monthly red tide pipeline Dave and I maintain; two PRs already merged). Review-only: no GitHub, no commits, no R on this machine. I mostly want the workflow review document: the inputs (what is tracked, what gets pulled at run time, what is gitignored), the pipeline and data transformations, the statistical models explained in plain language, randomness and seeds, outputs, run times and caching, plus the housekeeping list of dead code and artifacts. Write the documents into the outputs folder under docs/review/.",
+      "expected_output": "A workflow-review.md (with the companion science review and findings log) that inventories RedTideMaps' inputs, outputs, models, randomness, run times and artifacts in plain language, with the known findings and no GitHub or git writes.",
+      "files": [],
+      "expectations": [
+        "A workflow-review.md exists under docs/review/ in the outputs, alongside a findings log",
+        "The stage table names fn.buffered_hulls and make_redtide_ascii (scripts/polygon_clipping_rt.R) and fn.fit_monthly_sdmTMB (scripts/sdmTMB_HAB_data.R)",
+        "The inputs section separates inputs tracked in the repository (VIIRS tif rasters, the MODIS FLH polygons Rdata, template rasters) from inputs pulled at run time into gitignored folders (FWC cell counts via the ArcGIS REST API into cell_counts/) and optional network inputs (MODIS or ERDDAP)",
+        "The outputs section states that out/<res>min/ecospace_ascii/ and plots/ are tracked deliverables while sdm/, clipped/, combined/ and run logs are gitignored intermediates, citing .gitignore",
+        "The randomness section flags the file-scope set.seed(6) in scripts/sdmTMB_HAB_data.R (around line 14) as running whenever the file is sourced, and notes that the hull clustering is deterministic since the issue #3 fix",
+        "The run-times section cites the incremental_fit toggle in run_redtide_maps.R (around line 75) and the README rerun timings as the existing cache-with-skip-toggle, and rt_log as the stage-timing pattern",
+        "The housekeeping list flags scripts/old scripts/ (about ten files, no README, other users' machine paths) and scripts/README.md whose only content is a placeholder line",
+        "A portability finding cites download.file without a raised timeout in scripts/get_HAB_data.R (around line 211)",
+        "Each statistical model (the sdmTMB fits, the hull footprint rule) has a one-sentence plain-language statement of the question it answers, and the document has a glossary",
+        "Every findings row has a file:line reference; the transcript contains no GitHub write, git commit or git push; run evidence is marked pending rather than fabricated"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "gfisher-second-audit",
+      "prompt": "Run /code-audit on /home/user/wfs-fem/gfisher. Dave merged my review PR (#4, issue #2) last week. Review-only this time: no GitHub, no commits, no R on this machine. Tell me which mode you would run in and why, what you would carry over from the last audit, and what is still wrong. Write anything you produce into the outputs folder under docs/review/.",
+      "expected_output": "The run recognises the merged review, picks the second-audit mode, carries over the open items from docs/issue2-review-gfisher-repo-plan.md, confirms closed findings without re-reporting them, and reports the new findings, with no GitHub or git writes.",
+      "files": [],
+      "expectations": [
+        "The transcript shows docs/issue2-review-gfisher-repo-plan.md was read before any proposal was made",
+        "The response states that issue #2 / PR #4 is merged (merge commit 62f7a08) and proposes a new issue and a new findings log (or asks the user to confirm) rather than reusing branch 2-review-gfisher-repo, naming the mode second audit",
+        "The carry-over list includes the unticked author sign-off from the previous plan, the open issue #5 seed-sensitivity question, and the README Known caveats",
+        "The previous findings P1-P8, R1-R4 and B1-B7 are not re-reported as new findings; they are confirmed closed in a line or two",
+        "A new finding cites the machine paths in docs/issue5_seed_experiment.R (lines 4 and 6) as violating the repository's own rule in CLAUDE.md (line 22)",
+        "A new finding flags refs/ for tracking about 12 MB of PDFs and PPTX plus two Outlook .msg files that no code reads",
+        "The proposed first run step is a drift check of a fresh run against the committed deliverables plus the input status table, because the baseline is now the merged outputs",
+        "The transcript contains no GitHub write, git commit or git push, and no fabricated run evidence"
+      ]
+    }
+  ]
+}
