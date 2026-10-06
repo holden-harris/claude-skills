@@ -42,7 +42,7 @@
         "The randomness section flags the file-scope set.seed(6) in scripts/sdmTMB_HAB_data.R (around line 14) as running whenever the file is sourced, and notes that the hull clustering is deterministic since the issue #3 fix",
         "The run-times section cites the incremental_fit toggle in run_redtide_maps.R (around line 75) and the README rerun timings as the existing cache-with-skip-toggle, and rt_log as the stage-timing pattern",
         "The housekeeping list flags scripts/old scripts/ (about ten files, no README, other users' machine paths) and scripts/README.md whose only content is a placeholder line",
-        "A portability finding cites download.file without a raised timeout in scripts/get_HAB_data.R (around line 211)",
+        "A finding (P or B lens) cites download.file without a raised timeout in scripts/get_HAB_data.R (around line 211)",
         "Each statistical model (the sdmTMB fits, the hull footprint rule) has a one-sentence plain-language statement of the question it answers, and the document has a glossary",
         "Every findings row has a file:line reference; the transcript contains no GitHub write, git commit or git push; run evidence is marked pending rather than fabricated"
       ]

@@ -27,6 +27,8 @@ Run the unmodified code the way the author runs it. The only edits allowed are t
 4. Copy the outputs outside the repository, next to the log and the two CSVs; `../<repo>-audit/<stamp>/` is a good default because git never sees it and the Phase 8 runs are compared against it later.
 5. `Rscript <skill>/scripts/session_capture.R <pkg ...>` for the environment table.
 
+While the run is in progress, do only static work: no other R process and no computing sweep on the same machine, so the wall time is a clean measurement, and note what else was running. An interrupted run (killed, out of memory, a crash) is recorded as such, with the exit code "not recorded", and repeated before its timing is used as evidence; its partial outputs may still be compared with the committed ones, with the interruption named in the Cause column.
+
 Write the workflow review §9 (as-found) with: an environment line (machine, OS, language version, the packages that matter, the commit, the exact edits made to run); a bold result line (exit code, wall time); a per-stage table (`Stage | Ran | Log evidence`) quoting the log; warnings, each tied to a finding ID; the MD5 comparison table (`Output group | Identical | Changed | Cause`) with every changed group explained or given a finding ID to investigate; and where the copy lives. Note line-ending-only differences separately from real changes, since they point at an editor or `core.autocrlf`, not at the code.
 
 From GFISHER section 4.1, verbatim except that names are replaced by roles, as the example of all of this:

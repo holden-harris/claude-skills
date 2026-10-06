@@ -154,7 +154,7 @@ Pause 4: tell the user how long the baseline is expected to take (from the READM
 
 Write the workflow review §9 (as-found): environment, result line (exit code, wall time), per-stage table with log evidence, the comparison with the committed outputs (output group | identical | changed | cause), and where the copy lives. Every changed file gets a cause now or a finding ID to investigate. Commit as `record` once the results exist.
 
-While the baseline runs, start Phase 5. The invariant is "measure before the first code change", not "measure before reading".
+While the baseline runs, start Phase 5, but only its static work: no other R process and no sweep that computes until the run has finished, so the wall time is a clean measurement, and record what else was running in the workflow review §9. An interrupted run (killed, out of memory, a crash) is recorded as such, with the exit code "not recorded", and repeated before its timing is used as evidence. The invariant is "measure before the first code change", not "measure before reading".
 
 ## Phase 5: review through eight lenses
 
@@ -213,7 +213,7 @@ Pause 10 before marking the pull request ready.
 - Finalise the science review §6-7 (results; discussion with ranked caveats) and the workflow review §0 (how to read; document map).
 - Offer a README and `CLAUDE.md` sync: the science review feeds "What it does", "Methods" and "Known caveats"; the workflow review feeds "Quick start", "Getting the data", "Configuration", "Outputs" and "Reproducibility"; the findings log is linked from "For collaborators". Commit as `docs`.
 - Write the pull request description from `<skill>/assets/pr-description.md` (a note to the author, changes made by theme, "needs examination" from the findings log §8, "also flagged", "running it back on the original machine" with the author's exact local config); it replaces the draft body and keeps `Fixes #N` and the checklist.
-- Pre-ready check on the findings log: no row still `open`, no placeholders, every unticked §5 step carried to a sub-issue, every changed output explained. Fill the findings log §11 (outcome per finding; carried-over items).
+- Pre-ready check on the findings log: no row still `open`, no placeholders, no dangling reference (a section, run, file or figure the documents cite but that does not exist), every unticked §5 step carried to a sub-issue, every changed output explained. Fill the findings log §11 (outcome per finding; carried-over items).
 - Mark ready, request the author's review, and add the profile's records (decision log, risk register) if it has them.
 - Wrap up for the user: what changed, what is waiting on whom, how to resume.
 

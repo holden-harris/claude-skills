@@ -24,7 +24,7 @@ Below, each section has a heading to copy, guidance in a blockquote (delete it w
 
 ## 1. The pipeline in one page
 
-> The input-to-output story in a paragraph, then the stage table. Add a diagram only when the flow branches or loops.
+> The input-to-output story in a paragraph, then the stage table. Add a diagram only when the flow branches or loops. Every row names one file and one main function, even when the stage spans several files; the other files and functions go in §4.
 
 | Stage | What goes in | What comes out | How long | Where in the code (file and main function) |
 |---|---|---|---|---|
@@ -101,7 +101,7 @@ Example evidence table (GFISHER §4.1b):
 
 ## 7. Outputs
 
-> The final products: file, format, units, grid and no-data conventions; which are tracked deliverables (the versioned product someone downstream consumes) and which are intermediates kept out of version control; who consumes each and how; how to sanity-check them (a plot to look at, a sum that must hold, a count to compare). Then the output tree.
+> The final products: file, format, units, grid and no-data conventions; which are tracked deliverables (the versioned product someone downstream consumes) and which are intermediates kept out of version control; who consumes each and how; how to sanity-check them (a plot to look at, a sum that must hold, a count to compare). Cite the ignore rules by file and line (`.gitignore:n`) when saying what is tracked and what is not. Then the output tree.
 
 Example (RedTideMaps `.gitignore`): "Only the deliverables are tracked (`out/<res>min/ecospace_ascii/`, `plots/`); the heavy intermediates (`sdm/`, `clipped/`, `combined/`, run logs) are ignored." Example (GFISHER): "Stage 1 overwrites `output/basemaps/` in place so a rebuild shows up in `git diff`; that is deliberate, because the basemaps are the versioned deliverable."
 
