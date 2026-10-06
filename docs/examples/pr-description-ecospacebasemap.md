@@ -55,7 +55,7 @@ The first run should reproduce the previous 5 min grids. That's the check worth 
 
 - **It is written to a person.** The author is addressed by name, told what to expect, and given the one file they need. The skill's Phase 9 keeps this register.
 - **Changes are grouped by theme, each with the why.** Not a commit list; the commits carry the detail.
-- **"Needs examination" is separate from the fixes**, and the arithmetic was left alone on purpose so outputs stay comparable. In the skill this is a `scientific` finding with status `author` (Doc C §8).
+- **"Needs examination" is separate from the fixes**, and the arithmetic was left alone on purpose so outputs stay comparable. In the skill this is a `scientific` finding with status `author` (findings log §8).
 - **Measurements before changes.** "I measured this before changing anything" (137 cells, 2.4e-8 over 1) is the evidence habit the skill asks for in every commit body.
 - **The closing check is concrete.** "The first run should reproduce the previous 5 min grids" names the one thing the author should verify first. The template ends with the same sentence pattern.
 - **Housekeeping and provenance appear even here**: the vintage-drift flag and the skipped-download behaviour are explained in terms of what the reader holds on disk.

@@ -6,23 +6,23 @@ One page for the second and later uses. The full rules are in `SKILL.md`; the te
 
 | # | Phase | Output | Pause |
 |---|---|---|---|
-| 1 | Setup interview | Doc C §0-1; mode; org profile; local or degraded | 1 confirm scope |
-| 2 | Orientation | Doc A §1-5 draft; Doc B §1-2 draft | 2 "is this what the code does?" |
-| 3 | GitHub scaffold | issue, branch `N-slug`, C created, A/B committed (docs), draft PR `Fixes #N` | 3 before the first write |
-| 4 | Smoke, then baseline | Doc B §9 as-found; record commit | 4 before the long run |
-| 5 | Review (8 lenses) | Doc C §2 registers; Doc B §3-8; Doc A §5-7 corrections | 5 triage per row |
-| 6 | Fix design | Doc C §4-5, §7 | 6 approve the commit plan |
-| 7 | Implement | one Doc C §5 step per commit; Doc C §6 change log | 7 each commit; 8 before regenerating outputs; 9 before destructive git |
-| 8 | Verify | Doc B §9 as-left; Doc C §9 ticked; record commit | 10 before marking ready |
-| 9 | Finish | Doc A §6-7 final; README sync; PR description; Doc C §11 | |
+| 1 | Setup interview | findings log §0-1; mode; org profile; local or degraded | 1 confirm scope |
+| 2 | Orientation | science review §1-5 draft; workflow review §1-2 draft | 2 "is this what the code does?" |
+| 3 | GitHub scaffold | issue, branch `N-slug`, findings log created, science and workflow reviews committed (docs), draft PR `Fixes #N` | 3 before the first write |
+| 4 | Smoke, then baseline | workflow review §9 as-found; record commit | 4 before the long run |
+| 5 | Review (8 lenses) | findings log §2 registers; workflow review §3-8; science review §5-7 corrections | 5 triage per row |
+| 6 | Fix design | findings log §4-5, §7 | 6 approve the commit plan |
+| 7 | Implement | one findings log §5 step per commit; findings log §6 change log | 7 each commit; 8 before regenerating outputs; 9 before destructive git |
+| 8 | Verify | workflow review §9 as-left; findings log §9 ticked; record commit | 10 before marking ready |
+| 9 | Finish | science review §6-7 final; README sync; PR description; findings log §11 | |
 
 ## Modes
 
-`audit` full | `fix` one issue, short C | `review-only` no GitHub writes, no commits | `resume` continue from C | `second audit` new issue and C, carry-overs, drift check first | `own past code` you are the author; offer to create a remote
+`audit` full | `fix` one issue, short findings log | `review-only` no GitHub writes, no commits | `resume` continue from the findings log | `second audit` new issue and findings log, carry-overs, drift check first | `own past code` you are the author; offer to create a remote
 
 ## Documents
 
-A `docs/review/science-review.md` (objectives, context, data sources, methods, results, discussion) | B `docs/review/workflow-review.md` (run it, inputs, pipeline, models, randomness, outputs, run times, verification record, glossary) | C `docs/review/issueN-<slug>-log.md` (status, scope, registers, evidence, fix design, plan, change log, decisions, needs examination, acceptance, GitHub record, closing summary)
+Science review `docs/review/science-review.md` (objectives, context, data sources, methods, results, discussion) | Workflow review `docs/review/workflow-review.md` (run it, inputs, pipeline, models, randomness, outputs, run times, verification record, glossary) | Findings log `docs/review/issueN-<slug>-log.md` (status, scope, registers, evidence, fix design, plan, change log, decisions, needs examination, acceptance, GitHub record, closing summary)
 
 ## Findings
 
@@ -55,8 +55,8 @@ git ls-files -ci --exclude-standard                                    # must be
 
 ## Pre-ready check (Phase 9)
 
-No `open` rows; no placeholders; every unticked §5 step carried to a sub-issue; every changed output has a cause in Doc B §9; Doc C §11 filled; author's sign-off box left open for them.
+No `open` rows; no placeholders; every unticked §5 step carried to a sub-issue; every changed output has a cause in the workflow review §9; the findings log §11 filled; author's sign-off box left open for them.
 
 ## Resume rule
 
-Read C, then `git log --oneline -15` and `git status`; continue at the first unticked step; never redo a ticked step; re-verify only when the tree disagrees with C.
+Read the findings log, then `git log --oneline -15` and `git status`; continue at the first unticked step; never redo a ticked step; re-verify only when the tree disagrees with the findings log.

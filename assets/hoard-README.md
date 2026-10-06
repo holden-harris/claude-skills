@@ -16,4 +16,4 @@ Moved here by the issue #N housekeeping commit on <date>; nothing here is read b
 |---|---|---|
 | `<script>.R` | `<original path>` | One-off script; superseded by `<function>` in `R/<stage>.R` |
 | `<output>.asc` | `<original path>` | Baseline copy taken before <change>; compare with `tools::md5sum()` |
-| `<folder>/` | `<original path>` | Scratch outputs from an abandoned approach; see Doc C §7 decision <k> |
+| `<folder>/` | `<original path>` | Scratch outputs from an abandoned approach; see findings log §7 decision <k> |

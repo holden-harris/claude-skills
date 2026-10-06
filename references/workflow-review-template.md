@@ -1,8 +1,8 @@
-# Template B: Workflow Review (`docs/review/workflow-review.md`)
+# Template: the workflow review (`docs/review/workflow-review.md`)
 
 ## How to use this template
 
-Document B is for an analyst who has never seen the code and needs to run it, trust it and maintain it. It is the long document of the three. It is drafted in Phase 2 (§1-2), filled during Phases 4 and 5 (§3-8 and §9 as-found), and finalised in Phase 8 (§9 as-left) with §0 written last.
+The workflow review is for an analyst who has never seen the code and needs to run it, trust it and maintain it. It is the long document of the three. It is drafted in Phase 2 (§1-2), filled during Phases 4 and 5 (§3-8 and §9 as-found), and finalised in Phase 8 (§9 as-left) with §0 written last.
 
 Plain-language rules, because the reader is not the person who wrote the code:
 
@@ -10,17 +10,17 @@ Plain-language rules, because the reader is not the person who wrote the code:
 - Start each subsection with one sentence on why it matters to someone running the pipeline.
 - Numbers go in tables with their cause or source next to them. Prose carries the reading.
 - Say what happens when something is missing or fails. Silence about failure modes is the most expensive gap in this document.
-- Length is whatever the content needs; a short pipeline gets a short B.
+- Length is whatever the content needs; a short pipeline gets a short workflow review.
 
 Below, each section has a heading to copy, guidance in a blockquote (delete it when writing), and examples drawn from real audits. The examples are illustrations of shape from other repositories; nothing in them is a fact about the repository being audited.
 
 ---
 
-# Workflow Review: <repository name>
+# Workflow review: <repository name>
 
 ## 0. How to read this document
 
-> Who it is for; the plain-language promise; the document map (A for the science, this document for running and maintaining, C for the audit record and decisions); the commit the line numbers refer to; last updated. Write this section last.
+> Who it is for; the plain-language promise; the document map (the science review for the science, this document for running and maintaining, the findings log for the audit record and decisions); the commit the line numbers refer to; last updated. Write this section last.
 
 ## 1. The pipeline in one page
 
@@ -31,7 +31,7 @@ Below, each section has a heading to copy, guidance in a blockquote (delete it w
 | 1 Habitat basemaps | geodatabase, dbSEABED grids, seagrass raster | nine sum-to-1 layers per cell | ~12 min (geodatabase read dominates) | `R/habitat_basemaps.R` |
 | 2 Video dataset | three survey CSVs, species list | station x group MaxN table | ~1 min | `R/video_dataset.R` |
 
-(Example rows from GFISHER; the run times come from Doc B §9, not from guesses.)
+(Example rows from GFISHER; the run times come from the workflow review §9, not from guesses.)
 
 ## 2. Setting up and running
 
@@ -85,7 +85,7 @@ Example failure behaviour worth recording (EcospaceBasemap): "The sum-to-one QC 
 
 Example (EcospaceBasemap §2.3): "Where the survey did not map a cell, the natural reef fractions are filled by inverse-distance weighting (nearby mapped cells count more, falling off with distance to the fourth power, eight neighbours). A smoothing model and ordinary kriging exist in the same function. When kriging fails the code falls back to the inverse-distance fill, but the fallback call does not pass the anchoring, strata or clamping settings, so a failed fit silently runs with different settings (finding M3)."
 
-Example (GFISHER stage 4a): "Habitat affinity is a selection ratio: how often a group was seen over a habitat relative to how available that habitat is. Uncertainty comes from 1,000 bootstrap draws, seeded. Sparse groups (fewer than about 50 occupied cells) give ratios that depend on the random stanza assignment (Doc B §6)."
+Example (GFISHER stage 4a): "Habitat affinity is a selection ratio: how often a group was seen over a habitat relative to how available that habitat is. Uncertainty comes from 1,000 bootstrap draws, seeded. Sparse groups (fewer than about 50 occupied cells) give ratios that depend on the random stanza assignment (workflow review §6)."
 
 ## 6. Randomness and reproducibility
 

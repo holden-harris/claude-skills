@@ -1,7 +1,7 @@
 # session_capture.R -------------------------------------------------------------------------
 # Purpose: print (and optionally write) a markdown table describing the R environment: R
 #   version, platform, OS, locale, date, and the version of each package of interest. Used for
-#   the environment line of Doc B section 9 and for the cloud hand-off.
+#   the environment line of the workflow review section 9 and for the cloud hand-off.
 # Usage:
 #   Rscript session_capture.R [pkg ...] [--out <file.md>] [--from <sweep_files.csv>]
 #     pkg ...          package names to report (packageVersion() or "not installed")

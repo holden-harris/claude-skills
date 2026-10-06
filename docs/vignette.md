@@ -10,12 +10,12 @@ The analyst asked for a review-only pass: "no GitHub writes, no commits, and R i
 
 ## 2. Phase 1: the setup interview
 
-The analyst was not available during this run, so the skill stated each question in its transcript and recorded the answer it assumed, then played the result back as Doc C §1. From the transcript:
+The analyst was not available during this run, so the skill stated each question in its transcript and recorded the answer it assumed, then played the result back as the findings log §1. From the transcript:
 
 ```
 Confirm mode review-only and org profile WFS-FEM? Assumed yes (the task says review-only,
   no GitHub writes, no commits; the remote owner is WFS-FEM).
-Analyst's machine (OS, R version)? Unknown; recorded as pending in Doc C §1 and Doc B §2.4
+Analyst's machine (OS, R version)? Unknown; recorded as pending in the findings log §1 and the workflow review §2.4
   (Windows and R 4.x assumed from the config example and the README's "R >= 4.4").
 What counts as reference outputs? Assumed: the author's legacy grids on their machine, the README
   verification table (:753-769) and the ten docs/img/ figures; no output is tracked
@@ -30,11 +30,11 @@ In a live session each of these is one question, and Pause 1 is the one-paragrap
 
 ## 3. Phase 2: orientation
 
-The skill read the driver and the function files, found the order of operations (anchor check, source `R/`, attach packages, settings, local config, pull and check inputs, sections 1 to 5), and drafted Doc A §1-5 and Doc B §1-2. The opening of Doc A §1 shows the register the skill aims for: every sentence carries its source, and the three things a user of the outputs must know come first.
+The skill read the driver and the function files, found the order of operations (anchor check, source `R/`, attach packages, settings, local config, pull and check inputs, sections 1 to 5), and drafted the science review §1-5 and the workflow review §1-2. The opening of the science review §1 shows the register the skill aims for: every sentence carries its source, and the three things a user of the outputs must know come first.
 
 > EcospaceBasemap builds the static basemap layers for the West Florida Shelf Ecopath with Ecosim / Ecospace model: a depth grid and its exclusion mask, ten habitat layers that sum to one in every water cell, nine binary management-area grids, eleven binary fleet-port grids and one categorical survey-region grid, all written as ESRI ASCII rasters on a common 5 arc-minute grid of 66 rows by 78 columns ... (README:3-5, 442; `make_WFS_basemaps.R:36-38`). ... Three things a user of the outputs must know. The sum-to-one folder (`habitat/sum1/`) is the Ecospace input; everything else is intermediate or auxiliary (README:698). The artificial reef layers are relief-weighted indices, not proportions, and the relief unit (feet in the source, treated as metres) is unresolved (§5.5, §7). And 85 to 90 percent of the natural reef in the finished basemap is dbSEABED rock redistributed by a stratified rule, not side-scan observation (§5.6, §7).
 
-Doc B §1 opens with the stage table; the "How long" column is honest about what is a claim and what is measured:
+The workflow review §1 opens with the stage table; the "How long" column is honest about what is a claim and what is measured:
 
 ```
 | Stage (driver section) | What goes in | What comes out | How long | Where in the code |
@@ -46,7 +46,7 @@ Pause 2 is "Is this what the code does?" On this repository the analyst, who had
 
 ## 4. Phase 3: skipped, and what it would have done
 
-Review-only skips the GitHub scaffold. Doc C's status block records that explicitly, and the resume rule reads it on the next invocation:
+Review-only skips the GitHub scaffold. The findings log's status block records that explicitly, and the resume rule reads it on the next invocation:
 
 ```
 Issue: none (review-only)        Branch: none (tree at claude/pensive-feynman-bvssdu, identical to main)        Pull request: none
@@ -60,7 +60,7 @@ Had the analyst chosen `audit`, Pause 3 would have shown the issue body (the WFS
 
 ## 5. Phase 4: smoke and baseline, handed off
 
-With no runtime, the skill wrote the smoke checks as a hand-off block in Doc C §3.8 and left every run-dependent cell reading "pending: run on the analyst's machine". Nothing in Doc B §9 was invented.
+With no runtime, the skill wrote the smoke checks as a hand-off block in the findings log §3.8 and left every run-dependent cell reading "pending: run on the analyst's machine". Nothing in the workflow review §9 was invented.
 
 ```
 Command line (from the repository root):
@@ -71,7 +71,7 @@ Command line (from the repository root):
 RStudio (open EcospaceBasemap.Rproj, then in the console): the same lines without the leading Rscript -e and quotes.
 ```
 
-On the analyst's machine the equivalent with the skill's own scripts is `Rscript <skill>/scripts/static_sweep.R .` for the parse check and inventory, then `Rscript <skill>/scripts/run_logged.R make_WFS_basemaps.R` and `snapshot_md5.R` for the baseline. What comes back (the log tail, the environment table, the fingerprint CSV) is pasted into the session and parsed into Doc B §9.
+On the analyst's machine the equivalent with the skill's own scripts is `Rscript <skill>/scripts/static_sweep.R .` for the parse check and inventory, then `Rscript <skill>/scripts/run_logged.R make_WFS_basemaps.R` and `snapshot_md5.R` for the baseline. What comes back (the log tail, the environment table, the fingerprint CSV) is pasted into the session and parsed into the workflow review §9.
 
 ## 6. Phase 5: the eight lenses
 
@@ -97,7 +97,7 @@ Pause 5 is the long conversation: one status per row, in lens order. A typical e
 
 ## 7. Phase 6: fix design and the decisions log
 
-Doc C §4 lists the configuration keys the fixes introduce (`dir.bathy`, `seed.ar`, `stop.on.qc`), the setup checks, one line of code change per finding with its backward-compatibility note, the housekeeping moves, and the constraints. §7 is the decisions skeleton; in a live session each "pending" becomes a dated, owned line at Pause 5 or in the issue:
+The findings log §4 lists the configuration keys the fixes introduce (`dir.bathy`, `seed.ar`, `stop.on.qc`), the setup checks, one line of code change per finding with its backward-compatibility note, the housekeeping moves, and the constraints. §7 is the decisions skeleton; in a live session each "pending" becomes a dated, owned line at Pause 5 or in the issue:
 
 ```
 1. 6 Oct 2026 ([analyst], by instruction): Review-only pass; documents written to the named outputs folder, not into the repository; no GitHub writes, no commits, no run. (scope)
@@ -115,10 +115,10 @@ Doc C §4 lists the configuration keys the fixes introduce (`dir.bathy`, `seed.a
 Nothing below happened in this run; it is what the `audit` mode does next, shown with the shape of evidence a finished audit carries (the GFISHER review in `docs/examples/full-audit-gfisher.md` is the real article).
 
 1. **Proceed to `audit`.** `/code-audit` again, mode `audit`: the skill opens the issue and branch, renames `draft-review-ecospacebasemap-repo-log.md` to `issueN-review-ecospacebasemap-repo-log.md`, commits the three documents (`docs`), and opens the draft pull request.
-2. **Smoke, then baseline.** Paste back the smoke output; run `run_logged.R` on the unmodified driver and `snapshot_md5.R snapshot` on the outputs; the skill writes Doc B §9 as-found and makes a `record` commit. A finished §9 reads like this (from GFISHER): "**Result: all stages ran to completion. Exit code 0. Wall time 15 min 39 s.**", followed by the comparison table whose Cause column explains every changed file.
+2. **Smoke, then baseline.** Paste back the smoke output; run `run_logged.R` on the unmodified driver and `snapshot_md5.R snapshot` on the outputs; the skill writes the workflow review §9 as-found and makes a `record` commit. A finished §9 reads like this (from GFISHER): "**Result: all stages ran to completion. Exit code 0. Wall time 15 min 39 s.**", followed by the comparison table whose Cause column explains every changed file.
 3. **Implement, one step per commit.** The mechanical fixes first (P1-P4, R1, B1, the D rows), each with `identical()` or fingerprint evidence in the commit body; then the behavioural ones the author approved (B2, M2) under their decision numbers; outputs regenerated as their own `outputs` commit after Pause 8; the `hoard/` moves as a `housekeeping` commit listing every file.
-4. **Verify the three targets.** A fresh clone without data stops with the MISSING table; a fresh clone with the data placed and a three-line `config.local.R` completes under `Rscript`; the author's interactive run on the same commit is byte-identical; the convention greps are empty. Doc C §9 is ticked except the author's sign-off.
-5. **Finish.** README sync from Docs A and B, the pull request description from the template (with "running it back on the original machine"), the pre-ready check (no `open` rows, no placeholders), the closing summary, and the decision issues for M1 to M8 opened with the WFS-FEM decision template.
+4. **Verify the three targets.** A fresh clone without data stops with the MISSING table; a fresh clone with the data placed and a three-line `config.local.R` completes under `Rscript`; the author's interactive run on the same commit is byte-identical; the convention greps are empty. The findings log §9 is ticked except the author's sign-off.
+5. **Finish.** README sync from the science review and the workflow review, the pull request description from the template (with "running it back on the original machine"), the pre-ready check (no `open` rows, no placeholders), the closing summary, and the decision issues for M1 to M8 opened with the WFS-FEM decision template.
 
 ## 9. What the analyst says at each pause
 
@@ -139,4 +139,4 @@ This review-only run took 68 tool calls and about 35 minutes of wall time in the
 
 ## 11. Where the documents live afterwards
 
-In review-only mode the documents land wherever the analyst named (here, a scratch folder). Once the audit proceeds they are committed to `docs/review/` in the repository, Doc C renamed to its issue number, and they travel with the pull request. The next audit of the same repository starts by reading them.
+In review-only mode the documents land wherever the analyst named (here, a scratch folder). Once the audit proceeds they are committed to `docs/review/` in the repository, the findings log renamed to its issue number, and they travel with the pull request. The next audit of the same repository starts by reading them.

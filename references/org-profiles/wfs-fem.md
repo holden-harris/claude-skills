@@ -10,7 +10,7 @@ Roles: the original author of the code is usually the person whose machine layou
 | Issue template | A plain issue in the code repository whose body carries the Task template's fields (next section); the Ops Task form itself when the issue is opened in Ops |
 | Labels | `code` for an audit, plus `docs`, `pipeline`, `EwE`, `decision`, `blocked` as they apply. The Ops label set is `meeting, code, EwE, pipeline, docs, outreach, paper, decision, blocked`; a code repository may also carry GitHub's defaults (RedTideMaps #3 was labelled `bug`) |
 | Project board | Every piece of work is an issue in the most relevant repository. Issues in Ops join the organisation project **WFS-FEM Operationalization** (project #4) automatically; issues in code repositories are added from the issue sidebar, then the project fields are set in the sidebar |
-| Sub-issues | Methods questions (Doc C §8) become sub-issues of the audit issue in the same repository (GFISHER #2 had #3 and #5) |
+| Sub-issues | Methods questions (findings log §8) become sub-issues of the audit issue in the same repository (GFISHER #2 had #3 and #5) |
 | Decision issues | For a decision that affects a method or a shared convention, a `[Decision]` issue (Ops template `decision.yml`, label `decision`) with the fields below; the outcome is summarised in Ops `docs/decisions.md` |
 | Branch | `N-short-description`, created from the issue's Development sidebar (`2-review-gfisher-repo`, `3-polygon-clipping-issues`) |
 | Pull request | Draft against `main`; body carries `Fixes #N`, the acceptance checklist and a note for the original author; ready at Phase 9 with the original author requested as reviewer |
@@ -18,7 +18,7 @@ Roles: the original author of the code is usually the person whose machine layou
 | Commit split | `code` / `docs` / `outputs` / `housekeeping`, plus this skill's `record` |
 | Trailer | `Co-Authored-By: Claude <model> <noreply@anthropic.com>` when Claude co-authored (for example `Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>`) |
 | Merge policy | Merge commit (RedTideMaps PR #2 and GFISHER PR #4 both did); delete the branch |
-| Decisions | Numbered in Doc C §7, and recorded in the issue that raised them |
+| Decisions | Numbered in findings log §7, and recorded in the issue that raised them |
 | External decision log | One line in Ops `docs/decisions.md` for each decision that affects a method or a shared convention |
 | Risk register | Ops `docs/risk-register.md`; a risk the audit finds that needs action becomes a task issue |
 | Review documents | `docs/review/` in the audited repository (GFISHER's first review, before this convention, lives at `docs/issue2-review-gfisher-repo-plan.md`) |
@@ -33,8 +33,8 @@ Fill these in the issue body, in this order, then set the matching project field
 | Product(s) | `A. EwE model update`, `B. SEDAR Mrt`, `C. Shiny App`, `D. R package`, `E. IEA/ESR`, `F. Peer-reviewed paper`, `G. Report`, `H. Other` (multi-select) |
 | Stakeholder group(s) | `A. SEFSC Gulf Fisheries Branch / SEDAR`, `B. Gulf IEA / ESR`, `C. Fisheries managers`, `D. Ecosystem modelers`, `E. Science community`, `F. Fishers and public`, `G. Funder (NOAA RESTORE reporting)`, `H. Other` (multi-select) |
 | Lead | The team-member dropdown (the analyst running the audit), or `Other` |
-| Context | Why this matters and where it comes from (cite the paper, working paper or meeting); for an audit, the Doc A §1-3 summary and the three run targets |
-| Acceptance criteria | A checklist; becomes Doc C §9 and the PR body |
+| Context | Why this matters and where it comes from (cite the paper, working paper or meeting); for an audit, the science review §1-3 summary and the three run targets |
+| Acceptance criteria | A checklist; becomes findings log §9 and the PR body |
 | External partner(s), if any | Free text (the agency or lab that provides data or reviews the work) |
 
 Project fields to set in the sidebar: Objective, Stakeholder group, Product, Priority (P0 to P3), Phase (the quarter the item should finish), Target date, Lead, External partner(s). Product, Stakeholder group and Lead are the three to set on every issue.
@@ -52,7 +52,7 @@ Row format in `docs/decisions.md`, one line per decision, the discussion staying
 | 2026-10-02 | GFISHER stage 2 stanza draw is seeded (seed = 1, overridable in config.local.R); whether one realisation is enough is issue #5 | GFISHER #2, PR #4 | Adopted |
 ```
 
-Add a line at merge (Phase 9) for each decision that affects a method or a shared convention (a seed policy, a default linkage distance, which repository produces a shared layer); decisions that only tidy one repository stay in Doc C §7. In cloud sessions the Ops repository must be attached before the line can be committed; otherwise give the user the line to paste.
+Add a line at merge (Phase 9) for each decision that affects a method or a shared convention (a seed policy, a default linkage distance, which repository produces a shared layer); decisions that only tidy one repository stay in the findings log §7. In cloud sessions the Ops repository must be attached before the line can be committed; otherwise give the user the line to paste.
 
 ## What the audit documents cite
 

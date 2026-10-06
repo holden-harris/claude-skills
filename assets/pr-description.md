@@ -1,4 +1,4 @@
-<!-- Pull request description for an audit branch, written in Phase 9 from document C.
+<!-- Pull request description for an audit branch, written in Phase 9 from the findings log.
      Replace every <...> and keep the headings. The reader is the original author, who may
      not have followed the issue, so say what changed and what did not before anything else. -->
 
@@ -6,7 +6,7 @@
 
 ## Changes made
 
-<One paragraph per theme, bold theme first, then what changed and why, naming files and functions. Keep to what a reader needs to trust the branch; the detail is in Doc C §6.>
+<One paragraph per theme, bold theme first, then what changed and why, naming files and functions. Keep to what a reader needs to trust the branch; the detail is in the findings log §6.>
 
 **Paths** (`<driver.R>`). <Repo-relative defaults; `config.local.R` gitignored and sourced after the defaults; the root anchor or working-directory guard, and what the wrong directory used to do; `dir.create(recursive = TRUE)`; interactive-only and platform-only calls guarded so the script runs under `Rscript`.>
 
@@ -20,7 +20,7 @@
 
 ## Needs examination
 
-<Numbered. The scientific items from Doc C §8, deliberately left unchanged so outputs stay comparable. For each: what you saw and where, what you measured, and the question for the author. Shape: "**1. <Source> publishes <field> in <unit A>, not <unit B>.** <Where it shows.> `<function>` uses it as <unit B>. That is inherited from the legacy script, and I deliberately left the arithmetic alone so output stays comparable with the verified legacy grids; it does compound the existing <caveat>, by roughly <factor> rather than the <factor> the README estimates.">
+<Numbered. The scientific items from the findings log §8, deliberately left unchanged so outputs stay comparable. For each: what you saw and where, what you measured, and the question for the author. Shape: "**1. <Source> publishes <field> in <unit A>, not <unit B>.** <Where it shows.> `<function>` uses it as <unit B>. That is inherited from the legacy script, and I deliberately left the arithmetic alone so output stays comparable with the verified legacy grids; it does compound the existing <caveat>, by roughly <factor> rather than the <factor> the README estimates.">
 
 1. <item>
 
@@ -33,14 +33,14 @@
 
 ## Acceptance checklist
 
-<Copy Doc C §9. Each box cites where the evidence lives: a section of B or C, a commit, a checksum CSV. Leave the author's box open; they tick it.>
+<Copy the findings log §9. Each box cites where the evidence lives: a section of the workflow review or the findings log, a commit, a checksum CSV. Leave the author's box open; they tick it.>
 
-- [ ] Baseline recorded before the first code change (Doc B §9 as-found; commit `<sha>`)
-- [ ] Fresh clone without data stops early with the missing-input table (Doc B §9 as-left)
-- [ ] Fresh clone with data and a minimal `config.local.R` runs end to end under `Rscript` (Doc B §9 as-left; `docs/review/<md5 compare>.csv`)
-- [ ] Independent interactive run on the same commit gives identical outputs (Doc B §9 as-left)
-- [ ] Every changed output has a cause (Doc C §6; outputs commit `<sha>`)
-- [ ] `git ls-files -ci --exclude-standard` empty; no machine paths outside commented examples (Doc C §9)
+- [ ] Baseline recorded before the first code change (workflow review §9 as-found; commit `<sha>`)
+- [ ] Fresh clone without data stops early with the missing-input table (workflow review §9 as-left)
+- [ ] Fresh clone with data and a minimal `config.local.R` runs end to end under `Rscript` (workflow review §9 as-left; `docs/review/<md5 compare>.csv`)
+- [ ] Independent interactive run on the same commit gives identical outputs (workflow review §9 as-left)
+- [ ] Every changed output has a cause (findings log §6; outputs commit `<sha>`)
+- [ ] `git ls-files -ci --exclude-standard` empty; no machine paths outside commented examples (findings log §9)
 - [ ] Original author has run the branch on the original machine
 
 ## Running it back on the original machine

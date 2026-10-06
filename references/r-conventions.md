@@ -1,6 +1,6 @@
 # R conventions: the target state after an audit
 
-Read this in Phase 6 (fix design) and Phase 7 (implement). It describes what an analysis repository looks like when the audit is done, so that each recommended change in Doc C §4 aims at a known shape rather than at taste. Part 1 applies to any language. Part 2 is R, and lifts its patterns and code from three audited repositories (GFISHER, RedTideMaps and EcospaceBasemap); where a block is quoted, that is where it comes from.
+Read this in Phase 6 (fix design) and Phase 7 (implement). It describes what an analysis repository looks like when the audit is done, so that each recommended change in the findings log §4 aims at a known shape rather than at taste. Part 1 applies to any language. Part 2 is R, and lifts its patterns and code from three audited repositories (GFISHER, RedTideMaps and EcospaceBasemap); where a block is quoted, that is where it comes from.
 
 Two rules before the list. Every change here still needs a finding ID or a decision number, and a `mechanical` change still needs identical-output evidence; the target state is not a licence to tidy. And the original author's layout keeps working: when a hardcoded path becomes a repo-relative default, the author's real path becomes a commented example in the local config template, so their first run after the merge needs one short untracked file and nothing else.
 
@@ -12,7 +12,7 @@ Two rules before the list. Every change here still needs a finding ID or a decis
 4. **One manifest of inputs.** A single table (key, stage that reads it, required or optional, how it is obtained, path, source) that the code, the error messages and the README "Getting the data" section all read from. Three copies of the same list drift; one cannot.
 5. **Downloads that skip existing files.** A fetch helper never overwrites what is on disk unless asked (`overwrite = TRUE`), because an endpoint that serves the current compilation would otherwise quietly change a user's inputs between runs. Each download is wrapped so one unreachable server does not abort the rest, and the failure message names the page to fetch from by hand.
 6. **Outputs split into tracked deliverables and ignored intermediates.** The files another project consumes are tracked and regenerated in place, so a rebuild shows in `git diff`. Heavy intermediates, caches and logs are ignored. The README names which is which.
-7. **Seeds set and documented.** Every random draw is seeded through an argument whose default reproduces the committed outputs. The README says which outputs depend on the seed, and Doc B §6 holds the same-seed and cross-seed evidence.
+7. **Seeds set and documented.** Every random draw is seeded through an argument whose default reproduces the committed outputs. The README says which outputs depend on the seed, and the workflow review §6 holds the same-seed and cross-seed evidence.
 8. **Scratch kept in `hoard/` or `archive/`.** Nothing is deleted. Superseded code and outputs move to `archive/` (tracked, with a README table) when someone may need to read them later, or to `hoard/` (gitignored, with a README) when they only need to exist on this machine.
 9. **A README with a fixed section set.** Quick start; Getting the data; Configuration; Outputs; For collaborators; Known caveats; Reproducibility. Part 2 says what each holds and which review document feeds it.
 10. **Ignore rules that match the tree.** `git ls-files -ci --exclude-standard` must print nothing. A file that is tracked and also matched by `.gitignore` is a mismatch the audit resolves one way or the other: `git rm --cached` with a decision number, or a narrower rule.
@@ -177,7 +177,7 @@ A negation only takes effect if every parent directory on the way is also un-ign
 
 Public data small enough to track ships with the repository, with a `SOURCE.md` beside it: origin URL, citation, the date it was downloaded, and any processing between the download and the file on disk (GFISHER `data/dbseabed/SOURCE.md` and `data/seagrass/SOURCE.md`). Shipping removes a network dependency; GFISHER shipped the dbSEABED grids after the provider's server was unreachable during the fresh-clone test, which would have blocked stage 1 for every new user. The download helper stays as a fallback and the manifest row becomes `repo`.
 
-Experiment scripts committed with the review documents (`docs/issueN_<what>.R`) follow the same rules as the pipeline: paths from the config or from arguments, no `setwd()`, outputs written next to the script (`docs/issueN_<what>_summary.csv`), and they reproduce exactly the numbers A or C cite them for. A script that only ran once on the analyst's machine is evidence nobody else can check.
+Experiment scripts committed with the review documents (`docs/issueN_<what>.R`) follow the same rules as the pipeline: paths from the config or from arguments, no `setwd()`, outputs written next to the script (`docs/issueN_<what>_summary.csv`), and they reproduce exactly the numbers the science review or the findings log cite them for. A script that only ran once on the analyst's machine is evidence nobody else can check.
 
 ### README section set
 
@@ -185,13 +185,13 @@ The three audited repositories converge on seven sections; GFISHER, the most rec
 
 | Section | Holds | Fed by |
 |---|---|---|
-| Quick start | Open the project file or `setwd()`; the install line; get the data; the one command (interactive and `Rscript` forms). Show the input-check table a run prints, so a user recognises it | Doc B §2 |
-| Getting the data | Everything the pipeline reads: a table of input, size, how (ships / downloads itself / by request) and where it goes; the expected `data/` tree with tracked and gitignored marked; what happens without each optional input; how to point at an existing copy instead of duplicating it | Doc B §3 |
-| Configuration | A `Key / Default / Purpose` table for every key in the SETTINGS block; where the file is sourced; the author's own config described in one sentence | Doc B §2, Doc C §4 |
-| Outputs | The output tree; which are tracked deliverables and which are ignored; what overwrites in place and why | Doc B §7 |
-| For collaborators | Your paths are yours; downloads never overwrite what you already have; contributing changes (branch from the issue, `(issue #N)` subjects, pull request with `Fixes #N`, commits split by type); a link to the review documents | C |
-| Known caveats | Numbered, ranked by how much each could affect a result, each citing the stage and the evidence | Doc A §7 |
-| Reproducibility | Tested environment (R version, OS, date); the byte-identity statement, in the form "a fresh clone with only `config.local.R` added runs end to end under `Rscript`; stage 1 outputs regenerate byte-identical given the same inputs, verified on a second machine on <date>; stages 2 to 4 are deterministic given `seed`"; the `tools::md5sum()` one-liner | Doc B §9 |
+| Quick start | Open the project file or `setwd()`; the install line; get the data; the one command (interactive and `Rscript` forms). Show the input-check table a run prints, so a user recognises it | workflow review §2 |
+| Getting the data | Everything the pipeline reads: a table of input, size, how (ships / downloads itself / by request) and where it goes; the expected `data/` tree with tracked and gitignored marked; what happens without each optional input; how to point at an existing copy instead of duplicating it | workflow review §3 |
+| Configuration | A `Key / Default / Purpose` table for every key in the SETTINGS block; where the file is sourced; the author's own config described in one sentence | workflow review §2, findings log §4 |
+| Outputs | The output tree; which are tracked deliverables and which are ignored; what overwrites in place and why | workflow review §7 |
+| For collaborators | Your paths are yours; downloads never overwrite what you already have; contributing changes (branch from the issue, `(issue #N)` subjects, pull request with `Fixes #N`, commits split by type); a link to the review documents | findings log |
+| Known caveats | Numbered, ranked by how much each could affect a result, each citing the stage and the evidence | science review §7 |
+| Reproducibility | Tested environment (R version, OS, date); the byte-identity statement, in the form "a fresh clone with only `config.local.R` added runs end to end under `Rscript`; stage 1 outputs regenerate byte-identical given the same inputs, verified on a second machine on <date>; stages 2 to 4 are deterministic given `seed`"; the `tools::md5sum()` one-liner | workflow review §9 |
 
 ### Other R rules seen in these repositories
 
@@ -206,7 +206,7 @@ The three audited repositories converge on seven sections; GFISHER, the most rec
 - **`tools::md5sum()` instead of a shell pipe** for checksums, and `file.path()` with forward slashes instead of pasted separators: both run on Windows without a shell, which is where the author usually works.
 ### Checks that confirm the target state
 
-Run these in Phase 8 and record each in Doc C §9 with the section that holds its evidence; GFISHER's portability commit cites the first three as "smoke-tested three ways".
+Run these in Phase 8 and record each in the findings log §9 with the section that holds its evidence; GFISHER's portability commit cites the first three as "smoke-tested three ways".
 
 - With a two-line `config.local.R` pointing at the data: the input table prints all `OK` and the run completes.
 - From the wrong directory: the driver stops at the anchor, and the message names the project file and prints `getwd()`.

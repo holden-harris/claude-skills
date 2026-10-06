@@ -8,7 +8,7 @@
 #   --out      folder for the CSVs (default: <repo>/../<basename(repo)>-audit/sweep/)
 #   --exclude  regex of paths to skip (default: (^|/)(archive|hoard|old scripts|renv|\.git)(/|$))
 # Outputs: sweep_functions.csv, sweep_files.csv, sweep_patterns.csv in --out, and a markdown
-#   summary on the console (paste it into Doc C section 3 or Doc B section 8).
+#   summary on the console (paste it into the findings log section 3 or the workflow review section 8).
 # Limits: call counts come from parse tokens, so a function passed by name (sapply(x, f)) or
 #   called through do.call() is not counted; files sourced through a loop over list.files()
 #   show as "dynamic" rather than by name. Treat zero-call and never-sourced lists as leads.

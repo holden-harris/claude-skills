@@ -4,7 +4,7 @@ Read this when Phase 5 begins, and for the smoke checks when Phase 4 begins. It 
 
 ## How to use it
 
-- One pass over the repository, eight tables in Doc C §2, in lens order: P portability, R reproducibility, B bugs and fragility, D documentation, M methods and statistics, S stochasticity, T run time, E efficiency and artifacts.
+- One pass over the repository, eight tables in the findings log §2, in lens order: P portability, R reproducibility, B bugs and fragility, D documentation, M methods and statistics, S stochasticity, T run time, E efficiency and artifacts.
 - Subagents may run the sweeps and return candidate rows. The main session reads every cited line before a row enters the register; a row that cannot be verified is dropped, not softened.
 - Each row is `ID | Where (file:line) | Problem | Kind | Severity | Status`. IDs are the lens letter plus a number (P1, R2) and are never reused. Kind is mechanical, behavioural or scientific; Severity is high, medium or low; Status is `open`, `fix: step k`, `author`, `issue #M` or `wontfix (decision n)`.
 - "None found; checked X, Y, Z" is a valid table body, because it tells the next reader what was looked at.
@@ -26,7 +26,7 @@ Read this when Phase 5 begins, and for the smoke checks when Phase 4 begins. It 
 
 ## Phase 4 smoke checklist
 
-Seconds, not minutes: each check finishes before the baseline starts, so a problem that would end a 16-minute run is found first. Record a failure as a row in Doc C §2 under the lens it belongs to (P for the anchor and undeclared packages, B for files that do not parse, R for missing inputs) and fix it after the baseline exists, unless it prevents any run at all; then record it, fix the minimum, and say so in the baseline notes. One problem, one row: its Status points at the step that fixes it.
+Seconds, not minutes: each check finishes before the baseline starts, so a problem that would end a 16-minute run is found first. Record a failure as a row in the findings log §2 under the lens it belongs to (P for the anchor and undeclared packages, B for files that do not parse, R for missing inputs) and fix it after the baseline exists, unless it prevents any run at all; then record it, fix the minimum, and say so in the baseline notes. One problem, one row: its Status points at the step that fixes it.
 
 | Check | How | What failure looks like |
 |---|---|---|
@@ -39,7 +39,7 @@ A pass reads: anchor OK, `n` files parsed with 0 errors, packages OK, inputs OK.
 
 ## P portability
 
-Asks: will it run on another machine? Feeds Doc B §2.
+Asks: will it run on another machine? Feeds the workflow review §2.
 
 **What to look for**
 - Absolute paths to one person's machine: drive letters, home folders, synced-drive folders, temp folders.
@@ -75,7 +75,7 @@ Asks: will it run on another machine? Feeds Doc B §2.
 
 ## R reproducibility
 
-Asks: will it produce the same outputs? Feeds Doc B §3 and §9.
+Asks: will it produce the same outputs? Feeds the workflow review §3 and §9.
 
 **What to look for**
 - Inputs absent from the repository with no manifest saying what they are, where they come from, their size and vintage.
@@ -87,14 +87,14 @@ Asks: will it produce the same outputs? Feeds Doc B §3 and §9.
 
 **How to check**
 - Cloud: `Grep "download\.file\(|url\(|curl|httr|GET\(|fromJSON\(.https?|read\.csv\(.https?|getNOAA|read_sf\(.https?" --glob "*.R"` for network inputs, then check each against the manifest and for a `file.exists()` skip. `Grep "sessionInfo\(|renv|packageVersion\(|R\.version" --glob "*.{R,md}"` for environment capture. `Grep -i "^cellsize|^xllcorner|^ncols|^nodata" --glob "**/*.asc"` and compare the header values across files. `Grep "Sys\.Date\(\)|Sys\.time\(\)|format\(Sys" --glob "*.R"` for stamped names.
-- Local: `git ls-files -ci --exclude-standard` (tracked but ignored; should be empty); `git ls-files | grep -E '\.(asc|tif|csv|rds|RData|png|pdf)$'` for tracked outputs, then ask which code writes each. `Rscript <skill>/scripts/snapshot_md5.R snapshot <outputs> before.csv` before the baseline and `... compare before.csv after.csv --md` after it; every changed file gets a cause or a finding ID. `Rscript <skill>/scripts/session_capture.R <pkgs>` gives the environment table for Doc B §9.
+- Local: `git ls-files -ci --exclude-standard` (tracked but ignored; should be empty); `git ls-files | grep -E '\.(asc|tif|csv|rds|RData|png|pdf)$'` for tracked outputs, then ask which code writes each. `Rscript <skill>/scripts/snapshot_md5.R snapshot <outputs> before.csv` before the baseline and `... compare before.csv after.csv --md` after it; every changed file gets a cause or a finding ID. `Rscript <skill>/scripts/session_capture.R <pkgs>` gives the environment table for the workflow review §9.
 
 **R specifics**
 - `renv.lock` or a `sessionInfo()` dump in the run log is the minimum; package versions change raster headers (`CELLSIZE` precision), CRS strings and `sf` geometry handling.
 - `download.file()` has a 60-second default timeout (`options(timeout)`); raise it around large downloads and treat a failed download as a missing input, not a crash.
 - `writeRaster()` writes `.asc` headers with the package's own precision; compare headers, not just values.
 
-**Evidence to record**: for a missing or network input, what it is and the sentence a newcomer needs to get it (goes to Doc B §3); for a mismatch, the two values side by side (`CELLSIZE 0.0833333333329999` against the exact 1/12 degree) and the count of cells or rows affected, in Doc C §3; for the environment, the table from `session_capture.R`.
+**Evidence to record**: for a missing or network input, what it is and the sentence a newcomer needs to get it (goes to the workflow review §3); for a mismatch, the two values side by side (`CELLSIZE 0.0833333333329999` against the exact 1/12 degree) and the count of cells or rows affected, in the findings log §3; for the environment, the table from `session_capture.R`.
 
 **Kind guidance**: adding a manifest, a cache or an environment record is mechanical. Swapping an input source or regenerating outputs on the correct template is behavioural (outputs change) and needs a decision number. A row that only documents an input's provenance is mechanical.
 
@@ -110,7 +110,7 @@ Asks: will it produce the same outputs? Feeds Doc B §3 and §9.
 
 ## B bugs and fragility
 
-Asks: what breaks, or passes silently? Feeds Doc A §6.
+Asks: what breaks, or passes silently? Feeds the science review §6.
 
 **What to look for**
 - Second-run failures: writers without an overwrite flag, non-recursive directory creation, files appended to rather than replaced.
@@ -130,7 +130,7 @@ Asks: what breaks, or passes silently? Feeds Doc A §6.
 - `sample(x)` on a length-one numeric `x` samples `1:x`; `ifelse()` drops dates and attributes; `rbind()` of data frames matches columns by name but not by type.
 - `try(..., silent = TRUE)` returns a `try-error` object that downstream code happily subsets.
 
-**Evidence to record**: the quoted line and what happens (the error text from the second run, the count of rows dropped, the message that should have been a stop). A count goes in Doc C §3 with the command that produced it.
+**Evidence to record**: the quoted line and what happens (the error text from the second run, the count of rows dropped, the message that should have been a stop). A count goes in the findings log §3 with the command that produced it.
 
 **Kind guidance**: an overwrite flag, a recursive `dir.create()`, a timeout or a `stop()` in place of a `message()` is mechanical. Fixing a filter that silently drops rows is behavioural, because the outputs differ, and needs a decision and a before/after table. A smoke failure from Phase 4 is recorded in this lens.
 
@@ -145,7 +145,7 @@ Asks: what breaks, or passes silently? Feeds Doc A §6.
 
 ## D documentation
 
-Asks: does the prose match the code? Feeds Doc A and Doc B throughout.
+Asks: does the prose match the code? Feeds the science review and the workflow review throughout.
 
 **What to look for**
 - README or comments that describe a variable, file or layout that does not exist (renamed, moved, never written).
@@ -161,7 +161,7 @@ Asks: does the prose match the code? Feeds Doc A and Doc B throughout.
 
 **R specifics**
 - roxygen `@param` names against `names(formals(f))`; `\dontrun{}` examples that reference retired functions or absolute paths.
-- A driver comment that quotes the "legacy" value of an argument documents a methods choice; copy it into Doc A §5 rather than losing it.
+- A driver comment that quotes the "legacy" value of an argument documents a methods choice; copy it into the science review §5 rather than losing it.
 
 **Evidence to record**: the two texts side by side, each with `file:line` (the prose and the code it should match). No measurement.
 
@@ -179,10 +179,10 @@ Asks: does the prose match the code? Feeds Doc A and Doc B throughout.
 
 ## M methods and statistics
 
-Asks: what is being estimated, under what assumptions, and does the code do that? Feeds Doc A §5 and §7, Doc B §5.
+Asks: what is being estimated, under what assumptions, and does the code do that? Feeds the science review §5 and §7, the workflow review §5.
 
 **What to look for**
-- Every model, estimator, interpolation and classification call: the formula, the family, the weights, the parameters, and whether they match what Doc A says is estimated.
+- Every model, estimator, interpolation and classification call: the formula, the family, the weights, the parameters, and whether they match what the science review says is estimated.
 - Fallbacks that fire on a failed fit and run a different method with different settings, silently.
 - Units: a quantity published in one unit and used as another; constants that imply a conversion nobody documents.
 - Thresholds, bins and pooling rules chosen by hand or by a heuristic, and whether the heuristic does what the comment says.
@@ -191,15 +191,15 @@ Asks: what is being estimated, under what assumptions, and does the code do that
 
 **How to check**
 - Cloud: `Grep "lm\(|glm\(|gam\(|kmeans\(|hclust\(|krige\(|variogram\(|idw\(|sdmTMB\(|mice\(|boot\(|optim\(|nls\(|family *=" --glob "*.R"` for the inventory; `Grep -i "fall(ing)? ?back" --glob "*.R"` and read what the fallback passes; `Grep -i "\b(ft|feet|m|metres|meters|km|deg|cells/L)\b" --glob "*.{R,md}"` on comments and column names, plus `Grep "0\.3048|3\.28|1e3\b|1e6\b" --glob "*.R"` for conversions; `Grep "breaks *=|cut\(|quantile\(|which\.max\(|>=? *[0-9]" --glob "*.R"` for thresholds and heuristics.
-- Local: reproduce one number by hand for each estimator (one cell, one month, one species) from the inputs, and keep the script; it becomes an experiment script Doc C cites.
+- Local: reproduce one number by hand for each estimator (one cell, one month, one species) from the inputs, and keep the script; it becomes an experiment script the findings log cites.
 
 **R specifics**
 - `kmeans()` with the default `nstart = 1` depends on the start; `cut()` with `include.lowest` and right-closed intervals puts boundary values where the comment may not expect; `quasibinomial` against `binomial` changes standard errors, not estimates.
 - A recursive fallback call inside a function has to pass every argument the caller set; otherwise a `match.arg()` default silently takes over.
 
-**Evidence to record**: the equation as implemented, the parameter values in force, and where possible one measured effect (a filled mean before and after, a count of months affected) in Doc C §3.
+**Evidence to record**: the equation as implemented, the parameter values in force, and where possible one measured effect (a filled mean before and after, a count of months affected) in the findings log §3.
 
-**Kind guidance**: mostly scientific: units, thresholds, pooling rules and parameter choices change what the method means, so the arithmetic stays as it is and the item goes to the author in Doc C §8 with the options laid out. A fallback that drops the caller's settings is behavioural (restoring them changes outputs only when the fallback fires) and needs a decision. Writing the choice down at the call site is a mechanical D fix.
+**Kind guidance**: mostly scientific: units, thresholds, pooling rules and parameter choices change what the method means, so the arithmetic stays as it is and the item goes to the author in the findings log §8 with the options laid out. A fallback that drops the caller's settings is behavioural (restoring them changes outputs only when the fallback fires) and needs a decision. Writing the choice down at the call site is a mechanical D fix.
 
 **Real examples**
 
@@ -212,7 +212,7 @@ Asks: what is being estimated, under what assumptions, and does the code do that
 
 ## S stochasticity
 
-Asks: where is randomness, is it seeded, and does the seed live where it should? Feeds Doc B §6.
+Asks: where is randomness, is it seeded, and does the seed live where it should? Feeds the workflow review §6.
 
 **What to look for**
 - Every random draw: sampling, jitter, random starts of a clustering or optimiser, bootstraps, imputation, random initial values in a fit.
@@ -230,7 +230,7 @@ Asks: where is randomness, is it seeded, and does the seed live where it should?
 - `kmeans()` draws its starts from the RNG, so an unseeded `kmeans()` is a random method; `sample()` changed algorithm in R 3.6.0 (`sample.kind`), so seeds from older sessions do not reproduce.
 - `set.seed()` at the top of a function file runs at `source()` time and is defeated by any draw between sourcing and fitting.
 
-**Evidence to record**: the draw and the nearest seed, both with locations; the same-seed comparison (identical, or which files moved) and the cross-seed table (which outputs changed, which were invariant) in Doc B §6, cited from Doc C §3.
+**Evidence to record**: the draw and the nearest seed, both with locations; the same-seed comparison (identical, or which files moved) and the cross-seed table (which outputs changed, which were invariant) in the workflow review §6, cited from the findings log §3.
 
 **Kind guidance**: adding a seed where there was none is behavioural: the outputs change once and need a decision and a before/after table. Moving an existing seed is mechanical only when the same-seed test shows identical outputs. Replacing a random method with a deterministic one is scientific and goes to the author unless they decide it in the issue.
 
@@ -245,7 +245,7 @@ Asks: where is randomness, is it seeded, and does the seed live where it should?
 
 ## T run time
 
-Asks: where does the time go, and what could be cached or skipped? Feeds Doc B §8.
+Asks: where does the time go, and what could be cached or skipped? Feeds the workflow review §8.
 
 **What to look for**
 - Which stage dominates, from the log, not from memory.
@@ -256,7 +256,7 @@ Asks: where does the time go, and what could be cached or skipped? Feeds Doc B �
 
 **How to check**
 - Cloud: `Grep "[0-9]+ ?(s|sec|min|minutes|hours?)\b" --glob "*.{R,md}"` for claims; `Grep -i "incremental|cache|skip|already (exist|present)|overwrite *= *FALSE" --glob "*.R"` for existing caches and toggles; `Grep "Sys\.time\(\)|system\.time\(|proc\.time\(|tictoc" --glob "*.R"` for existing timers; `Grep "st_read\(|read_sf\(|rast\(|raster\(|read\.csv\(" --glob "*.R"` inside `for` and `lapply` bodies for repeated reads.
-- Local: `Rscript <skill>/scripts/run_logged.R <driver.R> --out <dir>` gives the wall time and a timestamped log; stage durations are the differences between consecutive stage lines. Record them in the Doc B §8 table (stage | wall time | what dominates | cache or skip candidate), saying what else was running and whether caches were warm.
+- Local: `Rscript <skill>/scripts/run_logged.R <driver.R> --out <dir>` gives the wall time and a timestamped log; stage durations are the differences between consecutive stage lines. Record them in the workflow review §8 table (stage | wall time | what dominates | cache or skip candidate), saying what else was running and whether caches were warm.
 
 **R specifics**
 - A log function that stamps each line is enough to derive stage times; RedTideMaps `rt_log()` (`scripts/_setup.R:150-155`: `paste0("[", format(Sys.time(), "%Y-%m-%d %H:%M:%S"), "] ", msg)` to console and file, called at every step of `run_redtide_maps.R`) is the pattern to copy where there is none.
@@ -273,11 +273,11 @@ Asks: where does the time go, and what could be cached or skipped? Feeds Doc B �
 |---|---|---|---|---|---|
 | T1 | GFISHER `CLAUDE.md:16` with plan doc `:107` | "A full run is about 16 minutes; stage 1's geodatabase read dominates"; the baseline measured exit code 0, wall time 15 min 39 s; the geodatabase read (309,348 microgrids) is the cache candidate | mechanical | low | open |
 | T2 | EcospaceBasemap `make_WFS_basemaps.R:189-190` | Comment claims "Slow (~2 min at 5 min resolution) - the fuzzy joins dominate"; no timer, log or `Sys.time()` exists in the repository (`Grep "Sys\.time\|proc\.time\|system\.time" --glob "*.R"` finds only a provenance stamp at `R/data_setup_functions.R:433`), so no stage time can be derived; claimed, not measured | mechanical | low | open |
-| T3 | RedTideMaps `README.md:84,86` | First-run stage times "(~3 min, ~216k records)" for the pull and "(~7 min)" for the fits are stated with no log in the repository (run logs are gitignored, `.gitignore:14-15`); Doc B §8 takes them from a fresh `run_logged.R` run, not from the README | mechanical | low | open |
+| T3 | RedTideMaps `README.md:84,86` | First-run stage times "(~3 min, ~216k records)" for the pull and "(~7 min)" for the fits are stated with no log in the repository (run logs are gitignored, `.gitignore:14-15`); workflow review §8 takes them from a fresh `run_logged.R` run, not from the README | mechanical | low | open |
 
 ## E efficiency and artifacts
 
-Asks: what is unused, duplicated or left behind? Feeds Doc B §8.
+Asks: what is unused, duplicated or left behind? Feeds the workflow review §8.
 
 **What to look for**
 - Functions defined and never called; files never sourced by the driver or by anything it sources.
@@ -312,11 +312,11 @@ Asks: what is unused, duplicated or left behind? Feeds Doc B §8.
 
 ## Cross-lens rules
 
-- Every row has `file:line` against the commit named in Doc C §0 and either a quoted snippet or a measurement; a row with neither is a note, not a finding, and does not enter the register.
+- Every row has `file:line` against the commit named in the findings log §0 and either a quoted snippet or a measurement; a row with neither is a note, not a finding, and does not enter the register.
 - A finding discovered later (by the baseline run, by a fresh-clone test, by the author's reply) is appended to its lens table with its origin in the Problem cell ("Found by the baseline run", "Found by the fresh-clone test on 2 Oct 2026"), never left in prose only; GFISHER R5 and R6 are the pattern.
 - When a cause turns out to be wrong, correct it in the row, dated ("Cause settled 2 Oct 2026: an older template, not a package-version effect"), and keep the first reading beside it, because the next reader will have the same first idea.
 - One problem gets one ID. Choose the lens by the fix that resolves it, and put a cross-reference in the Problem cell when another lens applies: caching a live download is one R row that also saves the download time, not an R row and a T row. Split only when the fixes differ in kind: EcospaceBasemap's `anchor.zero = 'both'` is a mechanical D row (write the choice down at the call site) and a scientific M row (whether to keep it), because one is done now and the other goes to the author.
-- A documentation-only fix is mechanical whatever lens the row sits in; a behavioural row carries a decision number in its Status; a scientific row ends as `author` with a Doc C §8 entry, and the arithmetic stays as it is.
-- Lens letter B is the bugs lens; the documents are always written "Doc A", "Doc B", "Doc C" (for example "Doc B §9") so the two never read as one.
-- Commits that close rows have a type (`code`, `docs`, `outputs`, `housekeeping`, `record`), named in Doc C §6 beside the IDs closed, so `git log --grep=<ID>` finds the commit.
-- Pre-ready check (Phase 9): no row still `open`; no placeholder ("to be added", "pending") anywhere in Doc C; every unticked §5 step carried to a sub-issue; every changed output explained in Doc B §9; Doc C §11 lists an outcome for every ID.
+- A documentation-only fix is mechanical whatever lens the row sits in; a behavioural row carries a decision number in its Status; a scientific row ends as `author` with a findings log §8 entry, and the arithmetic stays as it is.
+- Lens letter B is the bugs lens; the documents are always named in full (science review, workflow review, findings log) so a lens letter never reads as a document.
+- Commits that close rows have a type (`code`, `docs`, `outputs`, `housekeeping`, `record`), named in the findings log §6 beside the IDs closed, so `git log --grep=<ID>` finds the commit.
+- Pre-ready check (Phase 9): no row still `open`; no placeholder ("to be added", "pending") anywhere in the findings log; every unticked §5 step carried to a sub-issue; every changed output explained in the workflow review §9; the findings log §11 lists an outcome for every ID.

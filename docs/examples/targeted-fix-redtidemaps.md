@@ -1,6 +1,6 @@
 # Example: a targeted fix (RedTideMaps, issue #3, pull request #4, September 2026)
 
-Source: `docs/issue3-hull-fix-plan.md` in https://github.com/WFS-FEM/RedTideMaps (253 lines). One issue, one bug, a written diagnosis and plan before any code changed. It is the model for the skill's `fix` mode (Appendix 1 of the Document C template). Excerpts are verbatim except that names of people are replaced by their roles, `[analyst]` and `[author]`; commentary follows each.
+Source: `docs/issue3-hull-fix-plan.md` in https://github.com/WFS-FEM/RedTideMaps (253 lines). One issue, one bug, a written diagnosis and plan before any code changed. It is the model for the skill's `fix` mode (Appendix 1 of the findings log template). Excerpts are verbatim except that names of people are replaced by their roles, `[analyst]` and `[author]`; commentary follows each.
 
 ## Diagnosis first, in one paragraph
 
@@ -38,11 +38,11 @@ Then "Contributing factors, not bugs on their own", including "`kmeans()` is uns
 | 1996-07 | 14 | split 9, 5 | 140 | 1.5 | no |
 ```
 
-"Every flagged month reproduces; none of the five control months does." A root cause that also explains why the unaffected cases are unaffected is the standard the skill asks for in Doc C §3.
+"Every flagged month reproduces; none of the five control months does." A root cause that also explains why the unaffected cases are unaffected is the standard the skill asks for in the findings log §3.
 
 ## Downstream impact in the model's own terms
 
-The document translates the artifact into what the ecosystem model would do with it ("the direct mortality response is a logistic in cells/L with inflection points of 50,000 to 400,000 cells/L ... the point is that the operational pipeline must not produce it unattended"). Document Doc A §7 is where this reasoning lives in the skill's layout.
+The document translates the artifact into what the ecosystem model would do with it ("the direct mortality response is a logistic in cells/L with inflection points of 50,000 to 400,000 cells/L ... the point is that the operational pipeline must not produce it unattended"). The science review §7 is where this reasoning lives in the skill's layout.
 
 ## Fix design with a chosen default and a sensitivity case
 
@@ -75,6 +75,6 @@ What to notice: the pause points are named in the prompt. The skill makes this t
 
 ## What the skill adds over this document
 
-- The document was never updated after it was uploaded; the results went into commit bodies and the pull request. C's status block and change log keep the record in one place.
+- The document was never updated after it was uploaded; the results went into commit bodies and the pull request. The findings log's status block and change log keep the record in one place.
 - The kickoff prompt names `docs/issue-3-hull-fix-plan.md` while the file is `issue3-hull-fix-plan.md`; the resume rule reads the folder rather than a remembered name.
 - A file-scope `set.seed(6)` elsewhere in the pipeline went unnoticed; the S lens inventories every random call before deciding what the seed should do.

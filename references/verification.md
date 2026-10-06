@@ -1,6 +1,6 @@
 # Verification protocols
 
-Read this when Phase 4 (smoke, then baseline) and Phase 8 (verify) begin, and in the degraded mode whenever a run step is handed to the analyst. Everything measured here is written into Doc B §9 (as-found in Phase 4, as-left in Phase 8) and cited from the evidence rows of Doc C §9, then committed as `record` before any code that relies on it. The worked examples are lifted from the GFISHER audit (WFS-FEM/GFISHER issue #2, `docs/issue2-review-gfisher-repo-plan.md`) and the RedTideMaps hull fix (issue #3).
+Read this when Phase 4 (smoke, then baseline) and Phase 8 (verify) begin, and in the degraded mode whenever a run step is handed to the analyst. Everything measured here is written into the workflow review §9 (as-found in Phase 4, as-left in Phase 8) and cited from the evidence rows of the findings log §9, then committed as `record` before any code that relies on it. The worked examples are lifted from the GFISHER audit (WFS-FEM/GFISHER issue #2, `docs/issue2-review-gfisher-repo-plan.md`) and the RedTideMaps hull fix (issue #3).
 
 Two rules hold throughout. Numbers go in tables with their cause next to them. Nothing is written that was not observed: a run time, exit code or checksum that has not arrived reads "pending: run on the analyst's machine".
 
@@ -11,11 +11,11 @@ Run before the baseline and again after any change to the entry point. Each chec
 | Check | How | Pass | Fail |
 |---|---|---|---|
 | Root anchor | The driver's anchor file (`<name>.Rproj`, or whatever the code tests) is in the repository root; run the driver from a wrong directory and from the root | Wrong directory stops with a readable message; root proceeds | Driver assumes `getwd()` is the root (a P-finding); record it, and fix only after the baseline unless it blocks every run |
-| Every file parses | `Rscript <skill>/scripts/static_sweep.R <repo>`; it parses each source file without executing anything | Zero parse errors | File and line of each error, as a B-finding in Doc C §2 |
+| Every file parses | `Rscript <skill>/scripts/static_sweep.R <repo>`; it parses each source file without executing anything | Zero parse errors | File and line of each error, as a B-finding in findings log §2 |
 | Packages | The repository's own package check if it has one, else `requireNamespace()` over the declared list | All present, or the exact `install.packages(c(...))` line printed | Missing packages listed with the file that needs them (a P-finding when undeclared) |
 | Inputs present | The repository's input manifest if it has one, else the paths the driver reads, checked with `file.exists()` | Every required input found | A table of what is missing and where to get it; a check that only fails deep inside a stage is itself a finding |
 
-A smoke pass reads: anchor OK, `n` files parsed with 0 errors, packages OK, inputs OK. A smoke fail is one line per problem, each a row in Doc C §2 with a finding ID.
+A smoke pass reads: anchor OK, `n` files parsed with 0 errors, packages OK, inputs OK. A smoke fail is one line per problem, each a row in the findings log §2 with a finding ID.
 
 ## Baseline protocol
 
@@ -27,7 +27,7 @@ Run the unmodified code the way the author runs it. The only edits allowed are t
 4. Copy the outputs outside the repository, next to the log and the two CSVs; `../<repo>-audit/<stamp>/` is a good default because git never sees it and the Phase 8 runs are compared against it later.
 5. `Rscript <skill>/scripts/session_capture.R <pkg ...>` for the environment table.
 
-Write Doc B §9 (as-found) with: an environment line (machine, OS, language version, the packages that matter, the commit, the exact edits made to run); a bold result line (exit code, wall time); a per-stage table (`Stage | Ran | Log evidence`) quoting the log; warnings, each tied to a finding ID; the MD5 comparison table (`Output group | Identical | Changed | Cause`) with every changed group explained or given a finding ID to investigate; and where the copy lives. Note line-ending-only differences separately from real changes, since they point at an editor or `core.autocrlf`, not at the code.
+Write the workflow review §9 (as-found) with: an environment line (machine, OS, language version, the packages that matter, the commit, the exact edits made to run); a bold result line (exit code, wall time); a per-stage table (`Stage | Ran | Log evidence`) quoting the log; warnings, each tied to a finding ID; the MD5 comparison table (`Output group | Identical | Changed | Cause`) with every changed group explained or given a finding ID to investigate; and where the copy lives. Note line-ending-only differences separately from real changes, since they point at an editor or `core.autocrlf`, not at the code.
 
 From GFISHER section 4.1, verbatim except that names are replaced by roles, as the example of all of this:
 
@@ -79,9 +79,9 @@ A changed MD5 says only that bytes differ. Root-cause it before writing the caus
 > normalisation. Largest absolute differences: UNC 0.080, SGR 0.080, NL 0.006, others below
 > 1e-3. The committed SGR mean is 0.01218; ours 0.01236.
 
-The pattern: name the single source, show that nothing else moved (the 3,793 identical cells), show that the moved cells move by the amount the method predicts (the normalisation factor), and give the largest differences with units. When the cause is an input the audit does not have, end with an **ask of the author** that is concrete and small: "add the two files (about 44 KB each) to `data/seagrass/` so the basemaps can be reproduced exactly." When it is a new finding (GFISHER R5, an effort raster whose header carried a rounded cell size from an older template), it gets an ID in Doc C §2 and a sentence saying whether code must change (there, no: the committed file is regenerated from the current template and a cheap guard is added).
+The pattern: name the single source, show that nothing else moved (the 3,793 identical cells), show that the moved cells move by the amount the method predicts (the normalisation factor), and give the largest differences with units. When the cause is an input the audit does not have, end with an **ask of the author** that is concrete and small: "add the two files (about 44 KB each) to `data/seagrass/` so the basemaps can be reproduced exactly." When it is a new finding (GFISHER R5, an effort raster whose header carried a rounded cell size from an older template), it gets an ID in the findings log §2 and a sentence saying whether code must change (there, no: the committed file is regenerated from the current template and a cheap guard is added).
 
-Keep the copy of the baseline outputs outside the repository with the MD5 CSVs and the full log, and write the path into Doc B §9. The Phase 8 runs are compared against this copy, and it is the only record of the author's committed outputs once `outputs` has landed.
+Keep the copy of the baseline outputs outside the repository with the MD5 CSVs and the full log, and write the path into the workflow review §9. The Phase 8 runs are compared against this copy, and it is the only record of the author's committed outputs once `outputs` has landed.
 
 ## Same-seed and cross-seed test
 
@@ -100,7 +100,7 @@ When the S lens finds randomness, or the baseline comparison shows outputs that 
 
 "The seed changes exactly one thing" is the conclusion this table earns: every total and every set is identical across seeds, and only the split among stanzas moves, through the two named calls (`rtruncnorm`, `sample.int`). A row that is neither identical nor explained by the draw is a bug, not a seed effect.
 
-Then the warning that belongs in Doc B §6 and Doc A §7: **a fixed seed makes the outputs reproducible but not less noisy.** One draw is one realisation. GFISHER's per-cell differences between seeds were 13 to 229 cells per stanza map with correlations from 0.14 to 0.98, and the author's committed maps against the baseline showed the same pattern, which is how you know the two are draws from the same process rather than different code. If the drawn quantity feeds a later stage, whether one realisation is acceptable is a methods question for the author, not something `set.seed()` answers.
+Then the warning that belongs in the workflow review §6 and the science review §7: **a fixed seed makes the outputs reproducible but not less noisy.** One draw is one realisation. GFISHER's per-cell differences between seeds were 13 to 229 cells per stanza map with correlations from 0.14 to 0.98, and the author's committed maps against the baseline showed the same pattern, which is how you know the two are draws from the same process rather than different code. If the drawn quantity feeds a later stage, whether one realisation is acceptable is a methods question for the author, not something `set.seed()` answers.
 
 ## Seed-sensitivity experiment
 
@@ -111,7 +111,7 @@ When the cross-seed test shows the draw matters downstream, the next step is an 
 - **Columns**: `Group | occupied cells | seed range / bootstrap width, median (max) | range of the final quantity | distinct best layers in 10 seeds | rank agreement with seed 1, min Spearman`. Any analysis with a per-group estimate and an interval can fill this shape.
 - **Options for the author, each deterministic**, with no recommendation enforced: average over many seeds (the expected composition), raise the pooling threshold so sparse groups borrow from a neighbour, or assign expected fractions instead of drawing.
 
-The experiment informs a methods decision (Doc C §8, a sub-issue, and where the profile has them a decision issue). It is never acted on silently: the arithmetic stays as it is so the outputs remain comparable, and the experiment script, committed with the documents, takes its paths from the config and reproduces the table it is cited for.
+The experiment informs a methods decision (findings log §8, a sub-issue, and where the profile has them a decision issue). It is never acted on silently: the arithmetic stays as it is so the outputs remain comparable, and the experiment script, committed with the documents, takes its paths from the config and reproduces the table it is cited for.
 
 ## Fresh-clone tests (Phase 8)
 
@@ -141,7 +141,7 @@ Finally the regenerated-vs-committed table, where every row cites a finding ID o
 | 4a affinities, stanza groups | A changes by up to 0.69 (red grouper 1), 0.44 (gag 0), 0.45 (red grouper 3), 0.10 to 0.32 elsewhere | one draw vs another; the sparse stanzas are the sensitive ones (issue #5) |
 | 4b, 4c affinities | regenerated from the seeded stage 2 table | as above |
 
-The acceptance checklist that these tests tick (Doc C §9) points at the section holding each piece of evidence, and its last box is the author's. GFISHER §7, verbatim except that names are replaced by roles:
+The acceptance checklist that these tests tick (findings log §9) points at the section holding each piece of evidence, and its last box is the author's. GFISHER §7, verbatim except that names are replaced by roles:
 
 > - [x] `Rscript "process GFISHER data.R"` from a fresh clone with only `config.local.R`
 >       added completes without error on the analyst's machine (4.1d; exit code 0).
@@ -161,18 +161,18 @@ The acceptance checklist that these tests tick (Doc C §9) points at the section
 
 ## The run matrix
 
-Doc B §9 (as-left) closes with one row per target. Fill it from the tests above; a cell that has not happened reads "pending". The example rows are GFISHER's; replace them with the audited repository's.
+The workflow review §9 (as-left) closes with one row per target. Fill it from the tests above; a cell that has not happened reads "pending". The example rows are GFISHER's; replace them with the audited repository's.
 
 | Target | How run | Inputs | Result | Evidence location |
 |---|---|---|---|---|
-| Analyst (fresh clone, `Rscript`) | `git clone -b 2-review-gfisher-repo` into a temp folder; `Rscript "process GFISHER data.R"` with a three-line `config.local.R` | by-request survey files by path (OneDrive), public grids and seagrass from EcospaceBasemap | exit 0; 56 min with two other R jobs running (16 min alone) | Doc B §9 as-left; `../gfisher-audit/<stamp>/clone/` |
-| Author's layout (interactive) | `GFISHER.Rproj` opened in RStudio, `source("process GFISHER data.R")`, no config overrides | `data/April2026` junction; grids and seagrass shipped in `data/` | all stages complete; 51 files byte-identical to the clone run | Doc B §9 as-left; `../gfisher-audit/<stamp>/interactive/` |
-| Fresh clone, no data | same clone, inputs absent | none | stops in about 20 s with a MISSING table naming `dbseabed` and the by-request files | Doc B §9 as-left, smoke paragraph |
-| Original author on their machine | their `config.local.R`, their habits | their trees | pending: author's sign-off, last box of Doc C §9 | PR comment when it arrives |
+| Analyst (fresh clone, `Rscript`) | `git clone -b 2-review-gfisher-repo` into a temp folder; `Rscript "process GFISHER data.R"` with a three-line `config.local.R` | by-request survey files by path (OneDrive), public grids and seagrass from EcospaceBasemap | exit 0; 56 min with two other R jobs running (16 min alone) | workflow review §9 as-left; `../gfisher-audit/<stamp>/clone/` |
+| Author's layout (interactive) | `GFISHER.Rproj` opened in RStudio, `source("process GFISHER data.R")`, no config overrides | `data/April2026` junction; grids and seagrass shipped in `data/` | all stages complete; 51 files byte-identical to the clone run | workflow review §9 as-left; `../gfisher-audit/<stamp>/interactive/` |
+| Fresh clone, no data | same clone, inputs absent | none | stops in about 20 s with a MISSING table naming `dbseabed` and the by-request files | workflow review §9 as-left, smoke paragraph |
+| Original author on their machine | their `config.local.R`, their habits | their trees | pending: author's sign-off, last box of findings log §9 | PR comment when it arrives |
 
 ## Convention checks
 
-Run after the last `code` commit and before the Phase 8 `record` commit; paste the commands and their output into Doc B §9 so a reader can rerun them.
+Run after the last `code` commit and before the Phase 8 `record` commit; paste the commands and their output into the workflow review §9 so a reader can rerun them.
 
 | Command | Expected |
 |---|---|
@@ -244,7 +244,7 @@ cat("determinism (1996-1999, two calls identical()):", identical(pl_a, pl_b), " 
 
 ## Cloud hand-off text
 
-In the degraded mode, paste a block like this at pause 4 (baseline) and again in Phase 8 (verification), with the placeholders filled. Until the results come back, Doc B §9 and the evidence rows in Doc C §9 read "pending: run on the analyst's machine", and nothing the block is expected to produce is written as if it had happened.
+In the degraded mode, paste a block like this at pause 4 (baseline) and again in Phase 8 (verification), with the placeholders filled. Until the results come back, the workflow review §9 and the evidence rows in the findings log §9 read "pending: run on the analyst's machine", and nothing the block is expected to produce is written as if it had happened.
 
 ```
 Run this on your machine, then paste back the three items at the end.
@@ -279,4 +279,4 @@ Paste back:
 If this skill's scripts are not on your machine, use the RStudio block; it needs only base R.
 ```
 
-Parse what comes back into Doc B §9 and C; quote the log lines rather than paraphrasing them, and give every changed MD5 a cause or a finding ID exactly as in a local baseline.
+Parse what comes back into the workflow review §9 and C; quote the log lines rather than paraphrasing them, and give every changed MD5 a cause or a finding ID exactly as in a local baseline.

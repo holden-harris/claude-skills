@@ -8,13 +8,13 @@ Create the issue in Phase 3, after orientation has been confirmed at pause 2, be
 
 The issue carries three things:
 
-- **Context**: what the repository does, who wrote it, why it is being audited and what is out of scope, in a few lines drawn from the Doc A §1-3 drafts, with the three run targets named.
-- **Acceptance criteria** as a checklist. These become Doc C §9 and are copied into the pull request body, so write them as statements that evidence can show true: a run from a fresh clone exits 0; a missing input stops the run with a table naming the file; `git ls-files -ci --exclude-standard` is empty; the author confirms a run on their machine. The last one stays open until the author ticks it.
+- **Context**: what the repository does, who wrote it, why it is being audited and what is out of scope, in a few lines drawn from the science review §1-3 drafts, with the three run targets named.
+- **Acceptance criteria** as a checklist. These become the findings log §9 and are copied into the pull request body, so write them as statements that evidence can show true: a run from a fresh clone exits 0; a missing input stops the run with a table naming the file; `git ls-files -ci --exclude-standard` is empty; the author confirms a run on their machine. The last one stays open until the author ticks it.
 - **Labels**, when the repository has them; the profile lists which.
 
 The profile decides the template. A repository with `.github/ISSUE_TEMPLATE/` uses its own forms; otherwise use `<skill>/assets/issue-body.md`. Search first (`gh issue list --search "<keyword>" --state all`) so the audit does not duplicate an issue the author already opened.
 
-Methods questions (the `scientific` findings that go to Doc C §8) become **sub-issues** of the audit issue, so they outlive the pull request and the author can answer them at their own pace. Create the issue, then link it: `gh api -X POST repos/{owner}/{repo}/issues/{N}/sub_issues -F sub_issue_id=<id>`, where `<id>` is the database id (`gh api repos/{owner}/{repo}/issues/{M} --jq .id`), not the issue number. Where the profile has decision issues, open the methods question as one.
+Methods questions (the `scientific` findings that go to the findings log §8) become **sub-issues** of the audit issue, so they outlive the pull request and the author can answer them at their own pace. Create the issue, then link it: `gh api -X POST repos/{owner}/{repo}/issues/{N}/sub_issues -F sub_issue_id=<id>`, where `<id>` is the database id (`gh api repos/{owner}/{repo}/issues/{M} --jq .id`), not the issue number. Where the profile has decision issues, open the methods question as one.
 
 Show the issue title and body, the branch name and the pull request body at pause 3, and wait for a yes before the first write.
 
@@ -32,16 +32,16 @@ Create it from the issue so GitHub links the two:
 
 ## The draft pull request
 
-Open it in Phase 3 step 5, as soon as the first `docs` commit (C, with the A and B drafts) is pushed, so the author has somewhere to watch from the start and the evidence has somewhere to attach.
+Open it in Phase 3 step 5, as soon as the first `docs` commit (the findings log, with the science and workflow review drafts) is pushed, so the author has somewhere to watch from the start and the evidence has somewhere to attach.
 
 ```
 git push -u origin N-slug
 gh pr create --draft --base main --title "<issue title> (issue #N)" --body-file <body.md>
 ```
 
-The body carries `Fixes #N` (merging then closes the issue), the acceptance checklist copied from Doc C §9, and a line saying the review documents live in `docs/review/`. As the audit proceeds the evidence goes in: the baseline result line and comparison table from Doc B §9 after Phase 4; the before/after table of every `outputs` commit; the run matrix after Phase 8. Update the body with `gh pr edit N --body-file <body.md>`; use a comment (`gh pr comment N --body-file <note.md>`) for progress the author should see as it happens, since body edits notify nobody.
+The body carries `Fixes #N` (merging then closes the issue), the acceptance checklist copied from the findings log §9, and a line saying the review documents live in `docs/review/`. As the audit proceeds the evidence goes in: the baseline result line and comparison table from the workflow review §9 after Phase 4; the before/after table of every `outputs` commit; the run matrix after Phase 8. Update the body with `gh pr edit N --body-file <body.md>`; use a comment (`gh pr comment N --body-file <note.md>`) for progress the author should see as it happens, since body edits notify nobody.
 
-At Phase 9, after pause 10 and the pre-ready check on C, rewrite the body from `<skill>/assets/pr-description.md` and then:
+At Phase 9, after pause 10 and the pre-ready check on the findings log, rewrite the body from `<skill>/assets/pr-description.md` and then:
 
 ```
 gh pr ready N
@@ -167,14 +167,14 @@ The housekeeping example lists every file it touches with size and reason, and i
 | Kind | One line |
 |---|---|
 | `code` | Changes what the code does or how it is configured; body carries the finding IDs closed and an `Evidence:` paragraph |
-| `docs` | README, `CLAUDE.md`, A and B, the config example; no code, no outputs |
+| `docs` | README, `CLAUDE.md`, the science and workflow reviews, the config example; no code, no outputs |
 | `outputs` | Regenerated tracked deliverables, one commit after pause 8; body carries the before/after table with a cause per row |
 | `housekeeping` | Moves to `hoard/` or `archive/`, `git rm --cached`, `.gitignore`; body lists every file |
-| `record` | Changes only documents (C, and Doc B §9) to capture evidence: a baseline, a test, a verification |
+| `record` | Changes only documents (the findings log, and the workflow review §9) to capture evidence: a baseline, a test, a verification |
 
 Keep types apart because they are read differently: a reviewer skims `docs`, reads `code` closely, and checks `outputs` against its table. A commit that mixes them hides the one that matters.
 
-**Record commits land before the code that relies on their evidence.** The baseline record precedes the first `code` commit; the stochasticity record (a565205 above) sits before the dead-code and bug-fix commits that cite it; the Phase 8 record precedes `outputs`. If the session ends after the record and before the fix, the evidence is already in the branch and the next session continues from C.
+**Record commits land before the code that relies on their evidence.** The baseline record precedes the first `code` commit; the stochasticity record (a565205 above) sits before the dead-code and bug-fix commits that cite it; the Phase 8 record precedes `outputs`. If the session ends after the record and before the fix, the evidence is already in the branch and the next session continues from the findings log.
 
 ## Merge
 
@@ -187,7 +187,7 @@ A merge made with a merge commit is reversible with `git revert -m 1 <merge sha>
 - `git add -A` in a repository with large data; stage by path, and read `git status` before every commit.
 - Commit `data/` or `output/` paths by accident. The tracked deliverables are named in `.gitignore` comments for a reason; anything else under those trees needs a decision first.
 - Force-push or rewrite history on a branch anyone else has pulled.
-- Rewrite history at all without a numbered decision in Doc C §7, the audit's own draft branch, and pause 9.
-- Push a scientific change without the author's decision; `scientific` items go to Doc C §8 and a sub-issue, and the arithmetic stays as it is.
-- Open the pull request as ready before the pre-ready check on C (no `open` rows, no placeholders, every unticked §5 step carried to a sub-issue, every changed output explained).
+- Rewrite history at all without a numbered decision in the findings log §7, the audit's own draft branch, and pause 9.
+- Push a scientific change without the author's decision; `scientific` items go to the findings log §8 and a sub-issue, and the arithmetic stays as it is.
+- Open the pull request as ready before the pre-ready check on the findings log (no `open` rows, no placeholders, every unticked §5 step carried to a sub-issue, every changed output explained).
 - Write a run time, exit code or checksum into a commit body that you did not see yourself or receive from the analyst.

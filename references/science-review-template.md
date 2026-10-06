@@ -1,22 +1,22 @@
-# Template A: Science and Objectives Review (`docs/review/science-review.md`)
+# Template: the science review (`docs/review/science-review.md`)
 
 ## How to use this template
 
-Document A tells a reader what the pipeline does and why, in the shape of a research article: objectives, context, data sources, methods, results, discussion. It is for anyone who needs to understand or cite the work (the original author, a reviewer, a new analyst, a reader of the paper that used the outputs). It is the stable document of the three: drafted in Phase 2, corrected in Phase 5, finalised in Phase 9, and revised in place on later audits with a line in its version history.
+The science review tells a reader what the pipeline does and why, in the shape of a research article: objectives, context, data sources, methods, results, discussion. It is for anyone who needs to understand or cite the work (the original author, a reviewer, a new analyst, a reader of the paper that used the outputs). It is the stable document of the three: drafted in Phase 2, corrected in Phase 5, finalised in Phase 9, and revised in place on later audits with a line in its version history.
 
 Rules that keep it trustworthy:
 
 - Every statement cites where it comes from: a file and line, a README section, a commit, a paper, or an interview with the author (write "author, interview, date"). What the code does not explain is marked "unexplained" rather than guessed.
-- File-level detail (which file, which function, which folder) lives in Document B. A says what was done scientifically and why; B says how to run and maintain it.
+- File-level detail (which file, which function, which folder) lives in the workflow review. The science review says what was done scientifically and why; the workflow review says how to run and maintain it.
 - Figures carry "what to look for" captions, not just titles.
-- Methods questions the audit raises go in §7 and in Doc C §8, and the arithmetic in the code stays as it is until the author decides.
+- Methods questions the audit raises go in §7 and in the findings log §8, and the arithmetic in the code stays as it is until the author decides.
 - Three to eight pages. Plain, precise prose; numbers in tables.
 
 Below, each section has a heading to copy, guidance in a blockquote (delete it when writing), and an example drawn from a real audit. The examples are illustrations of shape from other repositories; nothing in them is a fact about the repository being audited, and names of people in them are replaced by roles in square brackets.
 
 ---
 
-# Science and Objectives Review: <repository name>
+# Science review: <repository name>
 
 ## 0. Header
 
@@ -50,21 +50,21 @@ Example (GFISHER): "GFISHER turns FWRI side-scan habitat mapping and the 3LABS v
 
 ## 4. Data sources
 
-> One short paragraph or table row per source, at the scientific level: provider, collection method, spatial and temporal coverage, vintage (which version the pipeline used), known limitations, citation or URL. Say which sources cannot be redistributed and why. File names, sizes and download instructions belong in Doc B §3.
+> One short paragraph or table row per source, at the scientific level: provider, collection method, spatial and temporal coverage, vintage (which version the pipeline used), known limitations, citation or URL. Say which sources cannot be redistributed and why. File names, sizes and download instructions belong in the workflow review §3.
 
 Example row: "FWC Seagrass Habitat in Florida (statewide compilation): polygons from aerial photo-interpretation, 1980s to present, served as the current compilation rather than a pinned release (the September 2026 download had 86,173 features). Public." (EcospaceBasemap README "Knowing which vintage you hold".)
 
 ## 5. Scientific methods
 
-> One subsection per stage, in run order. For each: purpose; the method in plain words; key parameters and assumptions, each with the justification found in the code or README, or marked "unexplained"; alternatives considered or rejected and why; references. Where a parameter is a methods choice rather than a fact, say so; it is a candidate for §7 and Doc C §8.
+> One subsection per stage, in run order. For each: purpose; the method in plain words; key parameters and assumptions, each with the justification found in the code or README, or marked "unexplained"; alternatives considered or rejected and why; references. Where a parameter is a methods choice rather than a fact, say so; it is a candidate for §7 and the findings log §8.
 
 Example (GFISHER stage 1, from `CLAUDE.md` architecture notes): "Reef density divides by scanned area, not cell area, then shrinks toward a region x depth-bin mean (`target = 'stratum'`). Smoothing and inverse-distance alternatives exist in the code and were rejected; the file header says why. Reef is forced to zero deeper than 300 m (`depth.max.reef`), unexplained in the README."
 
-Example (EcospaceBasemap §2.3): "Gaps in the GFISHER survey (61% of water cells) are filled by inverse-distance weighting (power 4, eight neighbours) with `anchor.zero = 'both'`. The function's own documentation says this anchoring biases the fill downward; the driver passes it without comment, to match the legacy maps. Methods question for the author (Doc C §8)."
+Example (EcospaceBasemap §2.3): "Gaps in the GFISHER survey (61% of water cells) are filled by inverse-distance weighting (power 4, eight neighbours) with `anchor.zero = 'both'`. The function's own documentation says this anchoring biases the fill downward; the driver passes it without comment, to match the legacy maps. Methods question for the author (findings log §8)."
 
 ## 6. Results
 
-> The final products and what they show: figures with "what to look for" captions; key numbers in a table; QC checks the code performs and their outcomes on the reviewed run; verification against reference or legacy outputs (identical, within tolerance, not comparable, with the reason). Cite Doc B §9 for the run evidence.
+> The final products and what they show: figures with "what to look for" captions; key numbers in a table; QC checks the code performs and their outcomes on the reviewed run; verification against reference or legacy outputs (identical, within tolerance, not comparable, with the reason). Cite the workflow review §9 for the run evidence.
 
 Example table (EcospaceBasemap README "Verification against the legacy scripts"):
 
@@ -76,7 +76,7 @@ Example table (EcospaceBasemap README "Verification against the legacy scripts")
 
 ## 7. Discussion
 
-> Interpretation and intended use; known caveats ranked by how much they could affect a downstream result (one line each, pointing to the stage); open methods questions for the author, each with the evidence and the options, marked "needs examination" and mirrored in Doc C §8; suggested scientific follow-ups and the issue that tracks each.
+> Interpretation and intended use; known caveats ranked by how much they could affect a downstream result (one line each, pointing to the stage); open methods questions for the author, each with the evidence and the options, marked "needs examination" and mirrored in the findings log §8; suggested scientific follow-ups and the issue that tracks each.
 
 Example caveat (EcospaceBasemap README "Known caveats" 2): "Artificial reef layers are relief-weighted indices, not proportions (§2.4): units of metres, roughly 10x the true covered fraction; the source publishes relief in feet, so the inflation may be nearer 25x. Needs examination; arithmetic left unchanged so outputs stay comparable with the verified grids."
 

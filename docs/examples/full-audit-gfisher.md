@@ -1,6 +1,6 @@
 # Example: a full audit (GFISHER, issue #2, pull request #4, October 2026)
 
-Source: `docs/issue2-review-gfisher-repo-plan.md` in https://github.com/WFS-FEM/GFISHER (451 lines). It predates this skill and is the single document that the skill's Document C generalises; its evidence sections became Doc B §9. Excerpts below are verbatim except that names of people are replaced by their roles, `[analyst]` (the person running the audit) and `[author]` (the original author of the code); commentary follows each.
+Source: `docs/issue2-review-gfisher-repo-plan.md` in https://github.com/WFS-FEM/GFISHER (451 lines). It predates this skill and is the single document that the skill's findings log generalises; its evidence sections became the workflow review §9. Excerpts below are verbatim except that names of people are replaced by their roles, `[analyst]` (the person running the audit) and `[author]` (the original author of the code); commentary follows each.
 
 ## The opening pins everything
 
@@ -14,7 +14,7 @@ Sections 1 to 4 describe what was found. Sections 5 to 8 are the work plan. Sect
 decisions as they are made. This file is updated as the work proceeds and travels with the PR.
 ```
 
-What to notice: branch, pull request, both authors and the document's own rules are in the first seven lines, and the findings section adds "Line numbers refer to the merged branch at commit `3e4dea1`". The skill's Doc C §0 status block keeps this and adds the last completed step, so a fresh session knows where to resume.
+What to notice: branch, pull request, both authors and the document's own rules are in the first seven lines, and the findings section adds "Line numbers refer to the merged branch at commit `3e4dea1`". The skill's findings log §0 status block keeps this and adds the last completed step, so a fresh session knows where to resume.
 
 ## The three standing goals
 
@@ -25,7 +25,7 @@ What to notice: branch, pull request, both authors and the document's own rules 
    live on GitHub.
 ```
 
-Every findings category in the document says which goal it blocks ("Portability (blocks goals 1 and 3)"). The skill names the same three targets in Doc C §1 and verifies each in Phase 8.
+Every findings category in the document says which goal it blocks ("Portability (blocks goals 1 and 3)"). The skill names the same three targets in the findings log §1 and verifies each in Phase 8.
 
 ## Findings as tables with IDs and `file:line`
 
@@ -95,4 +95,4 @@ From the branch: "Record the baseline run: all stages run; seagrass and seeding 
 - A placeholder check before "ready for review" (line 95 still read "to be added in section 4.1").
 - A plan-versus-code check (section 5.3 says "remove workspace wipe"; the driver still begins `rm(list=ls())`).
 - Experiment scripts obeying the repository's own path rule (`docs/issue5_seed_experiment.R` lines 4 and 6 carry machine paths).
-- A separate, plain-language Workflow Review (B) and Science Review (A); here the science lived in the README and CLAUDE.md.
+- A separate, plain-language workflow review and science review; here the science lived in the README and CLAUDE.md.

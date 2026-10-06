@@ -10,9 +10,9 @@ Two things, together:
 
 1. **A walk-through with you.** Claude Code understands the code, runs it, reviews it through eight lenses, proposes fixes, and makes small tracked changes, pausing at ten points for your decisions. The work goes through a GitHub issue, a branch and a draft pull request, and every decision is recorded.
 2. **Three review documents**, written into the repository under `docs/review/`:
-   - `science-review.md` (A): what the pipeline does and why, in research-article form (objectives, context, data sources, methods, results, discussion). Stable and citable.
-   - `workflow-review.md` (B): how to run, trust and maintain it, in plain language (inputs, pipeline, statistical models, randomness, outputs, run times, verification record). As long as it needs to be.
-   - `issueN-<slug>-log.md` (C): the living log of findings, recommended changes, decisions and acceptance criteria. One per issue; also the state the skill resumes from.
+   - `science-review.md`, the science review: what the pipeline does and why, in research-article form (objectives, context, data sources, methods, results, discussion). Stable and citable.
+   - `workflow-review.md`, the workflow review: how to run, trust and maintain it, in plain language (inputs, pipeline, statistical models, randomness, outputs, run times, verification record). As long as it needs to be.
+   - `issueN-<slug>-log.md`, the findings log: the living log of findings, recommended changes, decisions and acceptance criteria. One per issue; also the state the skill resumes from.
 
 The three standing goals of every audit: the tracked code runs for you, still runs for the original author with their layout, and runs from a fresh clone once the documented data is placed.
 
@@ -56,18 +56,18 @@ Open Claude Code in the repository to audit and type `/code-audit`. The skill st
 | Phase | What happens | You decide |
 |---|---|---|
 | 1 Setup | Interview; mode and org profile chosen | Confirm the scope |
-| 2 Orientation | Reads the code; drafts Doc A §1-5 and Doc B §1-2 | "Is this what the code does?" |
-| 3 GitHub scaffold | Issue, branch, C created, draft PR | Approve the first GitHub writes |
+| 2 Orientation | Reads the code; drafts science review §1-5 and workflow review §1-2 | "Is this what the code does?" |
+| 3 GitHub scaffold | Issue, branch, findings log created, draft PR | Approve the first GitHub writes |
 | 4 Smoke, then baseline | Quick checks; unmodified run; fingerprints of outputs | Start the long run (or run it yourself in degraded mode) |
-| 5 Review | Eight lenses; findings registers; Doc B §3-8 | Triage every finding: fix, hand to the author, sub-issue, or won't fix |
+| 5 Review | Eight lenses; findings registers; workflow review §3-8 | Triage every finding: fix, hand to the author, sub-issue, or won't fix |
 | 6 Fix design | Recommended changes, commit plan, decisions | Approve the plan and how often to pause |
 | 7 Implement | One commit per step, evidence in each body | Each commit (or "run through step k") |
 | 8 Verify | Fresh clone, minimal config, independent run; every changed output explained | Before the PR is marked ready |
-| 9 Finish | A and B finalised; README sync; PR description; closing summary | Review request to the author |
+| 9 Finish | Science and workflow reviews finalised; README sync; PR description; closing summary | Review request to the author |
 
-Modes: `audit` (full), `fix` (one issue, short form of C), `review-only` (documents and findings, no GitHub writes or commits), `resume`, `second audit` (a previous review was merged), `own past code` (you are the original author). The skill detects the likely mode and asks.
+Modes: `audit` (full), `fix` (one issue, short form of the findings log), `review-only` (documents and findings, no GitHub writes or commits), `resume`, `second audit` (a previous review was merged), `own past code` (you are the original author). The skill detects the likely mode and asks.
 
-To resume after an interruption, type `/code-audit` again in the same repository: it reads `docs/review/`, `git log` and `git status` and continues at the first unticked step of C.
+To resume after an interruption, type `/code-audit` again in the same repository: it reads `docs/review/`, `git log` and `git status` and continues at the first unticked step of the findings log.
 
 ## Model and effort
 
@@ -95,7 +95,7 @@ Cloud sessions and machines without the runtime or the data run a degraded mode:
 | `docs/vignette.md` | A complete walk-through on one repository |
 | `docs/quick-reference.md` | One page for the second and later uses |
 | `docs/examples/` | Excerpts of finished audits with commentary |
-| `references/doc-a-science-review.md`, `doc-b-workflow-review.md`, `doc-c-review-log.md` | The three document templates |
+| `references/science-review-template.md`, `workflow-review-template.md`, `findings-log-template.md` | The three document templates |
 | `references/review-rubric.md` | What to look for in each of the eight lenses |
 | `references/r-conventions.md` | The target state of an R repository |
 | `references/github-workflow.md` | Issue, branch, PR, commit style, local vs cloud tools |

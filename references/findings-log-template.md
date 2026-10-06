@@ -1,8 +1,8 @@
-# Template C: Issues Flagged, Recommended Changes and Decisions (`docs/review/issueN-<slug>-log.md`)
+# Template: the findings log (`docs/review/issueN-<slug>-log.md`)
 
 ## How to use this template
 
-Document C is the working record of one audit: what was found, what was decided, what changed, and what is still open. It is created in Phase 3, updated before every commit, and is the state the skill resumes from after an interruption. One C per issue; a later audit opens a new one and carries over what the previous one left open.
+The findings log is the working record of one audit: what was found, what was decided, what changed, and what is still open. It is created in Phase 3, updated before every commit, and is the state the skill resumes from after an interruption. One findings log per issue; a later audit opens a new one and carries over what the previous one left open.
 
 Guardrails built into the layout, each because a past audit needed it:
 
@@ -33,7 +33,7 @@ Last completed step: <§5 step k>        Next step: <§5 step k+1>        Last u
 
 ## 1. Scope and targets
 
-> The three run targets, named: who, on what machine, with what layout. What is in scope; what is explicitly out and which issue tracks it. Which documents this audit produces or revises (A, B, this C).
+> The three run targets, named: who, on what machine, with what layout. What is in scope; what is explicitly out and which issue tracks it. Which documents this audit produces or revises (the science review, the workflow review, this findings log).
 
 Example (GFISHER): "1. [analyst] can run it (Windows 11, R 4.5.1, RStudio). 2. [author] can still run it with their existing paths and habits. 3. Any new GitHub user can run it, accepting that the geodatabase and survey CSVs cannot live on GitHub. Whether the basemap stage belongs in this repository is issue #3 and out of scope here."
 
@@ -78,7 +78,7 @@ Example (GFISHER): "1. [analyst] can run it (Windows 11, R 4.5.1, RStudio). 2. [
 
 ## 3. Evidence notes
 
-> Only for findings that needed a measurement or a quoted snippet to be believed: the command run, the number observed, the date. Everything about the baseline and verification runs lives in Doc B §9; link to it rather than repeating it.
+> Only for findings that needed a measurement or a quoted snippet to be believed: the command run, the number observed, the date. Everything about the baseline and verification runs lives in the workflow review §9; link to it rather than repeating it.
 
 Example (GFISHER R5): "Found by the baseline run: 14 cells differ by one station each, in seven pairs of vertically adjacent cells; the committed header reads `CELLSIZE 0.0833333333329999` while the depth grid carries the exact 1/12 degree. Cause settled 2 Oct 2026: an older template, not a package-version effect."
 
@@ -95,8 +95,8 @@ Example (GFISHER R5): "Found by the baseline run: 14 cells differ by one station
 
 > Ordered checkboxes. Each step carries its commit type and the IDs it closes. Mark the agreed pause points. Tick as you go; the skill resumes at the first unticked box.
 
-- [x] 1. Commit this document and the A and B drafts. (docs)
-- [x] 2. Baseline run and snapshot; record in Doc B §9. (record)
+- [x] 1. Commit this document and the science and workflow review drafts. (docs)
+- [x] 2. Baseline run and snapshot; record in the workflow review §9. (record)
 - [ ] 3. Portability: root anchor, setup file, config example, driver edits, `.gitignore`. (code; P1, P2, P3, P4, P8)
 - [ ] 4. Seed the stage 2 draws; swap the Java-dependent reader. (code; R1, P5; decision 2)
 - [ ] 8. Regenerate outputs with the seeded pipeline. (outputs; pause before)
@@ -108,8 +108,8 @@ Example (GFISHER R5): "Found by the baseline run: 14 cells differ by one station
 
 | Commit | Kind | IDs closed | Evidence | Documents updated |
 |---|---|---|---|---|
-| `8bafbaa` | code | P1, P2, P3, P4, P8 | smoke-tested three ways; stages 1-4a byte-identical to baseline | Doc B §2, Doc C §5 |
-| `a565205` | record | (S check) | same seed identical; cross-seed invariants hold | Doc B §6 |
+| `8bafbaa` | code | P1, P2, P3, P4, P8 | smoke-tested three ways; stages 1-4a byte-identical to baseline | workflow review §2, findings log §5 |
+| `a565205` | record | (S check) | same seed identical; cross-seed invariants hold | workflow review §6 |
 
 ## 7. Decisions log
 
@@ -129,13 +129,13 @@ Example: "M1 Reef relief is published in feet but the weighting treats it as met
 
 > Checkboxes, each citing the section that holds the evidence. The last one is the author's sign-off and stays open until they give it.
 
-- [ ] A fresh clone with only the local config added completes from the command line (Doc B §9.3).
-- [ ] Run from the wrong folder stops with the anchor message; a missing input stops before any slow work with a table naming the file and where to get it (Doc B §9.3).
+- [ ] A fresh clone with only the local config added completes from the command line (workflow review §9.3).
+- [ ] Run from the wrong folder stops with the anchor message; a missing input stops before any slow work with a table naming the file and where to get it (workflow review §9.3).
 - [ ] `git grep -nE "[A-Za-z]:/|/Users/|/home/|OneDrive|AppData" -- '*.R'` matches only commented examples; `git grep -n "windows(" -- '*.R'` matches nothing.
-- [ ] Outputs regenerate identically given the same inputs, or every difference has a cause (Doc B §9.3 table).
-- [ ] Same seed gives identical outputs across two independent runs (Doc B §6).
+- [ ] Outputs regenerate identically given the same inputs, or every difference has a cause (workflow review §9.3 table).
+- [ ] Same seed gives identical outputs across two independent runs (workflow review §6).
 - [ ] `git ls-files --cached --ignored --exclude-standard` is empty.
-- [ ] A, B and the README describe the stages, inputs, outputs and tested environment.
+- [ ] The science review, the workflow review and the README describe the stages, inputs, outputs and tested environment.
 - [ ] The original author runs the branch with their local config and confirms the outputs.
 
 ## 10. GitHub record
@@ -146,7 +146,7 @@ Example block (EcospaceBasemap): "After merging, create `config.local.R` in the 
 
 ## 11. Closing summary
 
-> Written at Phase 9 after the pre-ready check (no `open` rows, no placeholders, every unticked §5 step carried to a sub-issue, every changed output explained in Doc B §9).
+> Written at Phase 9 after the pre-ready check (no `open` rows, no placeholders, every unticked §5 step carried to a sub-issue, every changed output explained in the workflow review §9).
 
 | ID | Outcome |
 |---|---|
@@ -155,7 +155,7 @@ Example block (EcospaceBasemap): "After merging, create `config.local.R` in the 
 | M1 | author; sub-issue #7 |
 | B2 | wontfix (decision 8): legacy module, superseded |
 
-Carried to the next audit: <list>. README and `CLAUDE.md` sections synced from A and B: <list>.
+Carried to the next audit: <list>. README and `CLAUDE.md` sections synced from the science review and the workflow review: <list>.
 
 ---
 

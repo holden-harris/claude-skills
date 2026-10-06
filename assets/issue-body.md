@@ -23,8 +23,8 @@
 
 ## Acceptance criteria
 
-- [ ] Baseline run (or snapshot) recorded before the first code change (Doc B §9 as-found)
-- [ ] Three review documents in `docs/review/` (A, B, C); README and `CLAUDE.md` synced from them
+- [ ] Baseline run (or snapshot) recorded before the first code change (workflow review §9 as-found)
+- [ ] Three review documents in `docs/review/` (science review, workflow review, findings log); README and `CLAUDE.md` synced from them
 - [ ] A fresh clone without data stops early with a readable table of what is missing and where to get it
 - [ ] A fresh clone with the documented data placed and a local config added runs end to end from the command line
 - [ ] The original author's layout still runs the same tracked code
