@@ -12,7 +12,7 @@ Rules that keep it trustworthy:
 - Methods questions the audit raises go in §7 and in Doc C §8, and the arithmetic in the code stays as it is until the author decides.
 - Three to eight pages. Plain, precise prose; numbers in tables.
 
-Below, each section has a heading to copy, guidance in a blockquote (delete it when writing), and an example drawn from a real audit.
+Below, each section has a heading to copy, guidance in a blockquote (delete it when writing), and an example drawn from a real audit. The examples are illustrations of shape from other repositories; nothing in them is a fact about the repository being audited.
 
 ---
 

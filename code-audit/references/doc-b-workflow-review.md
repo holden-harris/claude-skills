@@ -12,7 +12,7 @@ Plain-language rules, because the reader is not the person who wrote the code:
 - Say what happens when something is missing or fails. Silence about failure modes is the most expensive gap in this document.
 - Length is whatever the content needs; a short pipeline gets a short B.
 
-Below, each section has a heading to copy, guidance in a blockquote (delete it when writing), and examples drawn from real audits.
+Below, each section has a heading to copy, guidance in a blockquote (delete it when writing), and examples drawn from real audits. The examples are illustrations of shape from other repositories; nothing in them is a fact about the repository being audited.
 
 ---
 
@@ -26,7 +26,7 @@ Below, each section has a heading to copy, guidance in a blockquote (delete it w
 
 > The input-to-output story in a paragraph, then the stage table. Add a diagram only when the flow branches or loops.
 
-| Stage | What goes in | What comes out | How long | Where in the code |
+| Stage | What goes in | What comes out | How long | Where in the code (file and main function) |
 |---|---|---|---|---|
 | 1 Habitat basemaps | geodatabase, dbSEABED grids, seagrass raster | nine sum-to-1 layers per cell | ~12 min (geodatabase read dominates) | `R/habitat_basemaps.R` |
 | 2 Video dataset | three survey CSVs, species list | station x group MaxN table | ~1 min | `R/video_dataset.R` |
@@ -81,7 +81,7 @@ Example failure behaviour worth recording (EcospaceBasemap): "The sum-to-one QC 
 
 ## 5. Statistical models and estimators
 
-> One subsection per model, test or estimator. For each: the question it answers, in one plain sentence; its inputs; the assumptions it makes and whether the data meet them; how it is fit (and with what settings); the diagnostics the code prints or saves; what happens on failure or fallback, and whether the settings survive the fallback; where the parameters are set (driver, function default, config); how the result feeds the next stage.
+> One subsection per model, test or estimator. For each: the question it answers, in one plain sentence; its inputs; the assumptions it makes and whether the data meet them; how it is fit (and with what settings); the diagnostics the code prints or saves; what happens on failure or fallback, and whether the settings survive the fallback; where the parameters are set (driver, function default, config); how the result feeds the next stage. Every model subsection states its assumptions explicitly, even when the code does not; write "assumptions not stated in the code" rather than leaving the item out.
 
 Example (EcospaceBasemap §2.3): "Where the survey did not map a cell, the natural reef fractions are filled by inverse-distance weighting (nearby mapped cells count more, falling off with distance to the fourth power, eight neighbours). A smoothing model and ordinary kriging exist in the same function. When kriging fails the code falls back to the inverse-distance fill, but the fallback call does not pass the anchoring, strata or clamping settings, so a failed fit silently runs with different settings (finding M3)."
 

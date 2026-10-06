@@ -13,7 +13,7 @@ Guardrails built into the layout, each because a past audit needed it:
 - Placeholders ("to be added") are allowed while work proceeds and are a blocker for "ready for review" (pre-ready check, §11).
 - Experiment scripts committed alongside this document take their paths from the configuration or from arguments and reproduce the tables they are cited for.
 
-Below, each section has a heading to copy, guidance in a blockquote (delete it when writing), and examples drawn from a real audit. The appendix holds the short form used in `fix` mode and the carry-over block used in a second audit.
+Below, each section has a heading to copy, guidance in a blockquote (delete it when writing), and examples drawn from a real audit. The examples are illustrations of shape from other repositories; nothing in them is a fact about the repository being audited. The appendix holds the short form used in `fix` mode and the carry-over block used in a second audit.
 
 ---
 
@@ -41,7 +41,7 @@ Example (GFISHER): "1. Holden can run it (Windows 11, R 4.5.1, RStudio). 2. Dave
 
 > One table per lens, in this order: P portability, R reproducibility, B bugs and fragility, D documentation, M methods and statistics, S stochasticity, T run time, E efficiency and artifacts. IDs are the lens letter plus a number and are never reused. Columns:
 >
-> - **Where**: `file:line` against the commit in §0; a quoted snippet in §3 when the line alone is not self-explanatory.
+> - **Where**: `file:line` against the commit in §0; a quoted snippet in §3 when the line alone is not self-explanatory. For a finding about a folder, a data file or a README section, give the path plus the line of the code or text that establishes the problem, so every row still carries a line.
 > - **Kind**: `mechanical` (fixing it does not change outputs), `behavioural` (outputs change: seeding, grid template, input swap), `scientific` (what the method means changes: units, thresholds, pooling, parameter choices). Behavioural needs a decision number; scientific goes to the author (§8).
 > - **Severity**: `high` (blocks a run target or materially changes outputs), `medium` (wrong or fragile with a workaround), `low` (tidy-up, wording).
 > - **Status**: `open`, `fix: step k`, `author` (handed over in §8), `issue #M` (sub-issue opened), `wontfix (decision n)`.
