@@ -1,0 +1,14 @@
+# RStudio and R session files, if the repository is opened as a project
+.Rproj.user/
+*.Rproj
+.Rhistory
+.RData
+.Ruserdata
+
+# Built packages
+*.skill
+dist/
+
+# OS and editor files
+.DS_Store
+Thumbs.db
