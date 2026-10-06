@@ -36,7 +36,7 @@ while (i <= length(args)) {
 }
 if (!is.null(from)) {
   if (!file.exists(from)) stop("--from file not found: ", from, call. = FALSE)
-  sw <- utils::read.csv(from, stringsAsFactors = FALSE)
+  sw <- utils::read.csv(from, stringsAsFactors = FALSE, colClasses = "character")
   if (!"library_calls" %in% names(sw)) stop("--from file has no library_calls column", call. = FALSE)
   extra <- unlist(strsplit(sw$library_calls[!is.na(sw$library_calls)], ";", fixed = TRUE))
   pkgs <- c(pkgs, trimws(extra))
@@ -60,7 +60,7 @@ lines <- c(
   paste0("| Locale | ", Sys.getlocale("LC_COLLATE"), " |"),
   paste0("| Date | ", format(Sys.time(), "%Y-%m-%d %H:%M:%S %Z"), " |"),
   paste0("| Library paths | ", paste(normalizePath(.libPaths(), winslash = "/"), collapse = "; "), " |"),
-  paste0("| renv active | ", if (nzchar(Sys.getenv("RENV_PROJECT"))) "yes" else "no", " |"),
+  paste0("| renv active (in ", normalizePath(getwd(), winslash = "/"), ") | ", if (nzchar(Sys.getenv("RENV_PROJECT"))) "yes" else "no", " |"),
   paste0("| renv.lock in working directory | ", if (file.exists("renv.lock")) "yes" else "no", " |"),
   "",
   "| Package | Version |",
@@ -69,6 +69,7 @@ lines <- c(
 )
 cat(paste(lines, collapse = "\n"), "\n")
 if (!is.null(out)) {
+  dir.create(dirname(out), recursive = TRUE, showWarnings = FALSE)
   writeLines(lines, out)
   cat("Written to", normalizePath(out, winslash = "/"), "\n")
 }

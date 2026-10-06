@@ -41,26 +41,26 @@ while (i <= length(args)) {
 }
 if (is.null(repo)) usage("repository path missing")
 if (!dir.exists(repo)) stop("Repository folder not found: ", repo, call. = FALSE)
-repo <- normalizePath(repo, winslash = "/", mustWork = TRUE)
+repo <- sub("/+$", "", normalizePath(repo, winslash = "/", mustWork = TRUE))
 if (is.null(out)) out <- file.path(dirname(repo), paste0(basename(repo), "-audit"), "sweep")
 dir.create(out, recursive = TRUE, showWarnings = FALSE)
 out <- normalizePath(out, winslash = "/", mustWork = TRUE)
 
 # Files --------------------------------------------------------------------------------------
 files <- list.files(repo, pattern = "\\.[Rr]$", recursive = TRUE, full.names = TRUE)
-rel <- substring(normalizePath(files, winslash = "/"), nchar(repo) + 2)
+rel <- substring(files, nchar(repo) + 2)
 keep <- !grepl(exclude, rel)
 files <- files[keep]; rel <- rel[keep]
 if (length(files) == 0) stop("No .R files found under ", repo, call. = FALSE)
 
 # Pattern categories (regex on non-comment source lines) ----------------------------------
 patterns <- list(
-  machine_path   = "\\b[A-Za-z]:/|/Users/|/home/|OneDrive|AppData",
+  machine_path   = "\\b[A-Za-z]:[/\\\\]|[/\\\\]Users[/\\\\]|[/\\\\]home[/\\\\]|OneDrive|AppData",
   setwd          = "\\bsetwd\\(",
   workspace_wipe = "rm\\(list\\s*=\\s*ls\\(\\)",
   platform_only  = "\\bwindows\\(|\\bdev\\.new\\(|\\bchoose\\.dir\\(|\\bfile\\.choose\\(",
-  rng_call       = "\\b(sample|sample\\.int|runif|rnorm|rbinom|rpois|rlnorm|rgamma|rbeta|kmeans|jitter|rtruncnorm)\\(",
   set_seed       = "\\bset\\.seed\\(",
+  rng_call       = "\\b(sample|sample\\.int|runif|rnorm|rbinom|rpois|rlnorm|rgamma|rbeta|kmeans|jitter|rtruncnorm)\\(",
   download       = "\\bdownload\\.file\\(",
   write_raster   = "\\bwriteRaster\\(",
   superassign    = "<<-",
@@ -94,13 +94,15 @@ calls_all <- data.frame(name = character(0), file = character(0), stringsAsFacto
 for (k in seq_along(files)) {
   f <- files[k]; r <- rel[k]
   src <- readLines(f, warn = FALSE)
+  src <- iconv(src, "UTF-8", "UTF-8", sub = "byte")   # invalid bytes become <xx>, so regex calls cannot abort
   pd <- tryCatch({
-    ex <- parse(text = src, keep.source = TRUE)
-    utils::getParseData(ex, includeText = FALSE)
+    ex <- parse(text = src, keep.source = TRUE, srcfile = srcfilecopy(r, src))
+    utils::getParseData(ex)
   }, error = function(e) e)
+  parsed_ok <- !inherits(pd, "error")
   if (inherits(pd, "error")) {
     parse_failures <- rbind(parse_failures,
-                            data.frame(file = r, message = conditionMessage(pd), stringsAsFactors = FALSE))
+                            data.frame(file = r, message = gsub("\n", " ", conditionMessage(pd)), stringsAsFactors = FALSE))
     pd <- NULL
   }
 
@@ -124,7 +126,7 @@ for (k in seq_along(files)) {
                                      top_level = (length(top) == 1 && top == 0),
                                      stringsAsFactors = FALSE))
     }
-    roots <- pd[pd$parent == 0 & pd$token == "expr", , drop = FALSE]
+    roots <- pd[pd$parent == 0 & pd$token %in% c("expr", "expr_or_assign_or_help"), , drop = FALSE]
     n_top_level_other <- nrow(roots) - sum(defs$top_level)
     # Call sites
     calls <- pd[pd$token == "SYMBOL_FUNCTION_CALL", , drop = FALSE]
@@ -140,7 +142,7 @@ for (k in seq_along(files)) {
   # library()/require() and source() targets, from source lines
   lib_lines <- grep("\\b(library|require|requireNamespace)\\(", src, value = TRUE)
   lib_lines <- lib_lines[!is_comment_line(lib_lines)]
-  libs <- unique(gsub("^.*\\b(library|require|requireNamespace)\\(\\s*['\"]?([A-Za-z0-9.]+)['\"]?.*$", "\\2", lib_lines))
+  libs <- unique(sub("^.*\\(\\s*['\"]?", "", unlist(regmatches(lib_lines, gregexpr("\\b(library|require|requireNamespace)\\(\\s*['\"]?[A-Za-z0-9.]+", lib_lines)))))
   libs <- libs[grepl("^[A-Za-z0-9.]+$", libs)]
   src_lines <- which(grepl("\\bsource\\(", src) & !is_comment_line(src))
   src_targets <- character(0); dynamic_source <- FALSE
@@ -150,7 +152,7 @@ for (k in seq_along(files)) {
     else dynamic_source <- TRUE
   }
   file_rows[[length(file_rows) + 1]] <- data.frame(
-    file = r, parsed = is.null(pd) == FALSE, n_lines = length(src),
+    file = r, parsed = parsed_ok, n_lines = length(src),
     functions_defined = if (nrow(defs) > 0) paste(defs$name, collapse = ";") else "",
     n_functions = nrow(defs), top_level_expressions = n_top_level_other,
     library_calls = paste(libs, collapse = ";"),
@@ -161,8 +163,9 @@ for (k in seq_along(files)) {
   seed_seen_line <- NA_integer_
   for (l in seq_along(src)) {
     line <- src[l]
-    if (is_comment_line(line) || !nzchar(trimws(line))) next
+    if (!nzchar(trimws(line))) next
     for (cat_name in names(patterns)) {
+      if (cat_name != "todo" && is_comment_line(line)) next   # TODO markers live in comments; nothing else should
       if (!grepl(patterns[[cat_name]], line, perl = TRUE)) next
       if (cat_name == "machine_path" && grepl("https?://", line)) next
       note <- ""
@@ -174,7 +177,7 @@ for (k in seq_along(files)) {
         }
       }
       if (cat_name == "rng_call")
-        note <- if (!is.na(seed_seen_line) && seed_seen_line < l) paste0("set.seed() seen earlier at line ", seed_seen_line) else "no set.seed() earlier in this file"
+        note <- if (!is.na(seed_seen_line) && seed_seen_line <= l) paste0("set.seed() seen earlier at line ", seed_seen_line) else "no set.seed() earlier in this file"
       if (cat_name == "download")
         note <- if (any(grepl("timeout", src))) "a timeout appears in this file" else "no timeout raised in this file (R's default is 60 s)"
       if (cat_name == "write_raster")
@@ -198,7 +201,7 @@ if (nrow(functions) > 0) {
 }
 # sourced_by: files whose literal source() targets end with this file's name
 files_df$sourced_by <- vapply(files_df$file, function(r) {
-  hits <- files_df$file[vapply(strsplit(files_df$source_targets, ";", fixed = TRUE), function(tg) any(nzchar(tg) & endsWith(r, sub("^\\./", "", tg))), logical(1))]
+  hits <- files_df$file[vapply(strsplit(files_df$source_targets, ";", fixed = TRUE), function(tg) any(nzchar(tg) & endsWith(paste0("/", r), paste0("/", sub("^\\./", "", tg)))), logical(1))]
   paste(setdiff(hits, r), collapse = ";")
 }, character(1))
 
@@ -231,9 +234,9 @@ norox <- if (nrow(functions) > 0) functions[!functions$has_roxygen, ] else funct
 md <- c(md, if (nrow(norox) == 0) "None." else paste0("- `", norox$name, "` (", norox$file, ":", norox$line, ")"))
 md <- c(md, "", "## Pattern hits by category", "", "| Category | Hits | First hits |", "|---|---|---|")
 for (cat_name in names(patterns)) {
-  sub <- pats[pats$category == cat_name, ]
-  first <- if (nrow(sub) == 0) "" else paste0(utils::head(paste0(sub$file, ":", sub$line), 3), collapse = "; ")
-  md <- c(md, paste0("| ", cat_name, " | ", nrow(sub), " | ", first, " |"))
+  hits <- pats[pats$category == cat_name, ]
+  first <- if (nrow(hits) == 0) "" else paste0(utils::head(paste0(hits$file, ":", hits$line), 3), collapse = "; ")
+  md <- c(md, paste0("| ", cat_name, " | ", nrow(hits), " | ", first, " |"))
 }
 md <- c(md, "", "Notes column in sweep_patterns.csv says, per hit, whether a seed precedes a random call, whether a download has a timeout, and whether writeRaster sets overwrite.")
 cat(paste(md, collapse = "\n"), "\n")

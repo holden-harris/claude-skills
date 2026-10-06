@@ -39,7 +39,7 @@ USAGE <- c(
   "          and print a markdown table grouped by top-level folder. --md prints only the",
   "          markdown, for pasting into a document.")
 
-DEFAULT_PATTERN  <- "\\.(asc|csv|tif|tiff|rds|RData|Rdata|txt|json|png|pdf)$"
+DEFAULT_PATTERN  <- "\\.(asc|csv|tif|tiff|rds|RData|Rdata|txt|json|png|pdf|prj)$"
 TEXT_EXT_PATTERN <- "\\.(asc|csv|txt|json|prj)$"
 STATUS_LEVELS    <- c("identical", "changed", "line-endings-only", "added", "removed")
 

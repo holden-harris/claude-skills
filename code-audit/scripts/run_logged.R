@@ -7,6 +7,9 @@
 #   --cwd  working directory for the child (default: the folder containing the driver)
 #   --out  folder for the log (default: <cwd>/../<basename(cwd)>-audit/<YYYYmmdd-HHMMSS>/)
 # Output: <out>/run_<stamp>.log; the console shows the exit status, wall time and log path.
+#   Live output accumulates in <out>/child_<stamp>.tmp until the child exits and is then merged
+#   into the log. The child's stdout is block-buffered while stderr is not, so messages and
+#   warnings can appear in the log before the printed output they relate to.
 # Exit status: the child's exit status, so a failed run fails this script too.
 # Base R only; the single system2() call starts the child Rscript. No shell pipes.
 # Untested in the authoring session (no R available); the first local run is the acceptance
@@ -50,19 +53,26 @@ child_log <- file.path(out, paste0("child_", stamp, ".tmp"))
 
 # git HEAD without calling git: read .git/HEAD and the ref it points to (or packed-refs).
 git_head <- function(dir) {
-  head_file <- file.path(dir, ".git", "HEAD")
+  gitdir <- file.path(dir, ".git")
+  if (file.exists(gitdir) && !dir.exists(gitdir)) {   # a worktree or submodule: .git is a file "gitdir: <path>"
+    gd <- sub("^gitdir:\\s*", "", readLines(gitdir, warn = FALSE, n = 1))
+    gitdir <- if (grepl("^(/|[A-Za-z]:)", gd)) gd else file.path(dir, gd)
+  }
+  head_file <- file.path(gitdir, "HEAD")
   if (!file.exists(head_file)) return("not a git repository (no .git/HEAD in the working directory)")
   head <- readLines(head_file, warn = FALSE, n = 1)
+  if (length(head) == 0 || !nzchar(head)) return("unknown (empty .git/HEAD)")
   if (!grepl("^ref: ", head)) return(paste(head, "(detached)"))
   ref <- sub("^ref: ", "", head)
-  ref_file <- file.path(dir, ".git", ref)
+  ref_file <- file.path(gitdir, ref)
   sha <- "unknown"
   if (file.exists(ref_file)) {
     sha <- readLines(ref_file, warn = FALSE, n = 1)
   } else {
-    packed <- file.path(dir, ".git", "packed-refs")
+    packed <- file.path(gitdir, "packed-refs")
     if (file.exists(packed)) {
-      hits <- grep(paste0(" ", ref, "$"), readLines(packed, warn = FALSE), value = TRUE)
+      lines <- readLines(packed, warn = FALSE)
+      hits <- lines[endsWith(lines, paste0(" ", ref))]
       if (length(hits) > 0) sha <- sub(" .*$", "", hits[1])
     }
   }
@@ -88,7 +98,6 @@ cat(paste(header, collapse = "\n"), "\n")
 
 rscript <- file.path(R.home("bin"), "Rscript")
 old_wd <- setwd(cwd)
-on.exit(setwd(old_wd), add = TRUE)
 status <- system2(rscript, args = shQuote(driver), stdout = child_log, stderr = child_log, wait = TRUE)
 end <- Sys.time()
 elapsed <- difftime(end, start, units = "secs")
