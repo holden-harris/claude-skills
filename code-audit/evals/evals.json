@@ -8,7 +8,7 @@
       "expected_output": "Three markdown documents under docs/review/ (science-review.md, workflow-review.md, issueN-<slug>-log.md) following the skill's templates, with the known EcospaceBasemap findings in the registers, scientific items routed to the author, run evidence marked pending, and no GitHub or git writes.",
       "files": [],
       "expectations": [
-        "Three documents exist under docs/review/ in the outputs: science-review.md, workflow-review.md, and a findings log named issue<N>-<slug>-log.md (N may be a placeholder)",
+        "Three documents exist under docs/review/ in the outputs: science-review.md, workflow-review.md, and a findings log named issue<N>-<slug>-log.md (N may be a placeholder) or, in review-only mode, draft-<slug>-log.md",
         "science-review.md contains sections for Summary, Objectives, Introduction and context, Data sources, Scientific methods, Results, Discussion and References",
         "workflow-review.md contains a stage table, a per-input section for the inputs, a statistical models section that states assumptions per model, a randomness section, a run-times section and a glossary",
         "The findings log has a status block and eight findings registers labelled P, R, B, D, M, S, T and E, and every findings row carries a file:line reference",
@@ -24,7 +24,8 @@
         "The relief-in-feet-treated-as-metres issue in the artificial reef stage is classified as a methods (M) finding routed to the author (status author or needs examination), and no change to the arithmetic is proposed",
         "A finding states that the driver passes anchor.zero='both' (make_WFS_basemaps.R around line 179) without explanation while the function's documentation (R/GFISHER functions.R around lines 310-314) describes it as biasing the fill downward",
         "The transcript contains no GitHub write (gh issue create, gh pr create, mcp__github__ write tools), no git commit and no git push, and no claim that R code was executed; the baseline and verification evidence is explicitly marked pending",
-        "The findings flag rm(list=ls()) at the top of make_WFS_basemaps.R and the unguarded plot() calls in the driver that produce Rplots.pdf under Rscript"
+        "The findings flag rm(list=ls()) at the top of make_WFS_basemaps.R and the unguarded plot() calls in the driver that produce Rplots.pdf under Rscript",
+        "The final answer to the user names which findings would go to the original author rather than be fixed, and that list matches the rows with status author in the findings log (at least the relief units and the anchor.zero choice)"
       ]
     },
     {
@@ -34,7 +35,7 @@
       "expected_output": "A workflow-review.md (with the companion science review and findings log) that inventories RedTideMaps' inputs, outputs, models, randomness, run times and artifacts in plain language, with the known findings and no GitHub or git writes.",
       "files": [],
       "expectations": [
-        "A workflow-review.md exists under docs/review/ in the outputs, alongside a findings log",
+        "A workflow-review.md exists under docs/review/ in the outputs, alongside a findings log (issue<N>-<slug>-log.md, or draft-<slug>-log.md in review-only mode)",
         "The stage table names fn.buffered_hulls and make_redtide_ascii (scripts/polygon_clipping_rt.R) and fn.fit_monthly_sdmTMB (scripts/sdmTMB_HAB_data.R)",
         "The inputs section separates inputs tracked in the repository (VIIRS tif rasters, the MODIS FLH polygons Rdata, template rasters) from inputs pulled at run time into gitignored folders (FWC cell counts via the ArcGIS REST API into cell_counts/) and optional network inputs (MODIS or ERDDAP)",
         "The outputs section states that out/<res>min/ecospace_ascii/ and plots/ are tracked deliverables while sdm/, clipped/, combined/ and run logs are gitignored intermediates, citing .gitignore",
@@ -56,7 +57,7 @@
         "The transcript shows docs/issue2-review-gfisher-repo-plan.md was read before any proposal was made",
         "The response states that issue #2 / PR #4 is merged (merge commit 62f7a08) and proposes a new issue and a new findings log (or asks the user to confirm) rather than reusing branch 2-review-gfisher-repo, naming the mode second audit",
         "The carry-over list includes the unticked author sign-off from the previous plan, the open issue #5 seed-sensitivity question, and the README Known caveats",
-        "The previous findings P1-P8, R1-R4 and B1-B7 are not re-reported as new findings; they are confirmed closed in a line or two",
+        "The previous findings P1-P8, R1-R6 and B1-B7 are not re-reported under new IDs; the ones still present in the repository (at least P3, the workspace wipe at the top of the driver, and B2, the self-referencing default in R/legacy/habitat_maps_cellarea.R) are carried over under their original IDs, and the rest are confirmed closed in a line or two",
         "A new finding cites the machine paths in docs/issue5_seed_experiment.R (lines 4 and 6) as violating the repository's own rule in CLAUDE.md (line 22)",
         "A new finding flags refs/ for tracking about 12 MB of PDFs and PPTX plus two Outlook .msg files that no code reads",
         "The proposed first run step is a drift check of a fresh run against the committed deliverables plus the input status table, because the baseline is now the merged outputs",
