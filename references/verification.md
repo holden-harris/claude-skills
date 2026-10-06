@@ -29,15 +29,15 @@ Run the unmodified code the way the author runs it. The only edits allowed are t
 
 Write Doc B §9 (as-found) with: an environment line (machine, OS, language version, the packages that matter, the commit, the exact edits made to run); a bold result line (exit code, wall time); a per-stage table (`Stage | Ran | Log evidence`) quoting the log; warnings, each tied to a finding ID; the MD5 comparison table (`Output group | Identical | Changed | Cause`) with every changed group explained or given a finding ID to investigate; and where the copy lives. Note line-ending-only differences separately from real changes, since they point at an editor or `core.autocrlf`, not at the code.
 
-From GFISHER section 4.1, verbatim, as the example of all of this:
+From GFISHER section 4.1, verbatim except that names are replaced by roles, as the example of all of this:
 
-> Run on 1 Oct 2026 on Holden's machine (Windows 11, R 4.5.1, raster 3.6-32, terra 1.8-80,
+> Run on 1 Oct 2026 on the analyst's machine (Windows 11, R 4.5.1, raster 3.6-32, terra 1.8-80,
 > sf 1.0-21) with `Rscript` on a copy of the driver at commit `b544821` in which exactly two
 > lines were changed: `dir.dbseabed` pointed at `EcospaceBasemap/data/dbseabed` and
 > `file.seagrass` at `EcospaceBasemap/output/5min/habitat/seagrass/seagrass_coverage_Seagrass_Statewide_5min.asc`.
-> `data/April2026` is a Windows directory junction to the OneDrive copy of Dave's folder, so
-> the files are not duplicated and git ignores the path. Dave's OneDrive Ecospace maps tree is
-> not synced to Holden's machine and was not needed.
+> `data/April2026` is a Windows directory junction to the OneDrive copy of the author's folder, so
+> the files are not duplicated and git ignores the path. The author's OneDrive Ecospace maps tree is
+> not synced to the analyst's machine and was not needed.
 >
 > **Result: all stages ran to completion. Exit code 0. Wall time 15 min 39 s.**
 
@@ -141,23 +141,23 @@ Finally the regenerated-vs-committed table, where every row cites a finding ID o
 | 4a affinities, stanza groups | A changes by up to 0.69 (red grouper 1), 0.44 (gag 0), 0.45 (red grouper 3), 0.10 to 0.32 elsewhere | one draw vs another; the sparse stanzas are the sensitive ones (issue #5) |
 | 4b, 4c affinities | regenerated from the seeded stage 2 table | as above |
 
-The acceptance checklist that these tests tick (Doc C §9) points at the section holding each piece of evidence, and its last box is the author's. GFISHER §7, verbatim:
+The acceptance checklist that these tests tick (Doc C §9) points at the section holding each piece of evidence, and its last box is the author's. GFISHER §7, verbatim except that names are replaced by roles:
 
 > - [x] `Rscript "process GFISHER data.R"` from a fresh clone with only `config.local.R`
->       added completes without error on Holden's machine (4.1d; exit code 0).
+>       added completes without error on the analyst's machine (4.1d; exit code 0).
 > - [x] Run from the wrong folder stops with the anchor message; missing input stops before
 >       stage 1 with a table naming the file and where to get it (4.1d; smoke tests in 4.1).
-> - [x] `git grep -nE "dchagaris|OneDrive"` over `*.R` matches only comments in
+> - [x] `git grep -nE "<author login>|OneDrive"` over `*.R` matches only comments in
 >       `config.local.example.R`. `git grep -n "windows("` matches nothing. (Verified before the
 >       final commits; see the PR checklist.)
-> - [x] Basemaps regenerate identically given the same inputs: the fresh-clone run, Holden's
+> - [x] Basemaps regenerate identically given the same inputs: the fresh-clone run, the analyst's
 >       RStudio run and the 1 Oct baseline agree byte for byte (4.1d). They differ from the
 >       author's committed files only in the 45 seagrass cells (decision 9).
 > - [x] Stages 2 and 3 are deterministic: same seed gives identical MaxN rasters (4.1b), and
 >       two independent runs at seed 1 are identical (4.1d).
 > - [x] `git ls-files --cached --ignored --exclude-standard` is empty (housekeeping commit).
 > - [x] README and CLAUDE.md describe the four stages, inputs, outputs, and tested environment.
-> - [ ] Dave runs the branch with his `config.local.R` and confirms the outputs.
+> - [ ] The author runs the branch with their `config.local.R` and confirms the outputs.
 
 ## The run matrix
 
@@ -165,10 +165,10 @@ Doc B §9 (as-left) closes with one row per target. Fill it from the tests above
 
 | Target | How run | Inputs | Result | Evidence location |
 |---|---|---|---|---|
-| Analyst (fresh clone, `Rscript`) | `git clone -b 2-review-gfisher-repo` into a temp folder; `Rscript "process GFISHER data.R"` with a three-line `config.local.R` | FWRI files by path (OneDrive), public grids and seagrass from EcospaceBasemap | exit 0; 56 min with two other R jobs running (16 min alone) | Doc B §9 as-left; `../gfisher-audit/<stamp>/clone/` |
+| Analyst (fresh clone, `Rscript`) | `git clone -b 2-review-gfisher-repo` into a temp folder; `Rscript "process GFISHER data.R"` with a three-line `config.local.R` | by-request survey files by path (OneDrive), public grids and seagrass from EcospaceBasemap | exit 0; 56 min with two other R jobs running (16 min alone) | Doc B §9 as-left; `../gfisher-audit/<stamp>/clone/` |
 | Author's layout (interactive) | `GFISHER.Rproj` opened in RStudio, `source("process GFISHER data.R")`, no config overrides | `data/April2026` junction; grids and seagrass shipped in `data/` | all stages complete; 51 files byte-identical to the clone run | Doc B §9 as-left; `../gfisher-audit/<stamp>/interactive/` |
-| Fresh clone, no data | same clone, inputs absent | none | stops in about 20 s with a MISSING table naming `dbseabed` and the FWRI files | Doc B §9 as-left, smoke paragraph |
-| Original author on his machine | his `config.local.R`, his habits | his trees | pending: author's sign-off, last box of Doc C §9 | PR comment when it arrives |
+| Fresh clone, no data | same clone, inputs absent | none | stops in about 20 s with a MISSING table naming `dbseabed` and the by-request files | Doc B §9 as-left, smoke paragraph |
+| Original author on their machine | their `config.local.R`, their habits | their trees | pending: author's sign-off, last box of Doc C §9 | PR comment when it arrives |
 
 ## Convention checks
 

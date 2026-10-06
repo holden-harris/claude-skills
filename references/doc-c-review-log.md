@@ -13,7 +13,7 @@ Guardrails built into the layout, each because a past audit needed it:
 - Placeholders ("to be added") are allowed while work proceeds and are a blocker for "ready for review" (pre-ready check, §11).
 - Experiment scripts committed alongside this document take their paths from the configuration or from arguments and reproduce the tables they are cited for.
 
-Below, each section has a heading to copy, guidance in a blockquote (delete it when writing), and examples drawn from a real audit. The examples are illustrations of shape from other repositories; nothing in them is a fact about the repository being audited. The appendix holds the short form used in `fix` mode and the carry-over block used in a second audit.
+Below, each section has a heading to copy, guidance in a blockquote (delete it when writing), and examples drawn from a real audit. The examples are illustrations of shape from other repositories; nothing in them is a fact about the repository being audited, and names of people in them are replaced by roles in square brackets. The appendix holds the short form used in `fix` mode and the carry-over block used in a second audit.
 
 ---
 
@@ -35,7 +35,7 @@ Last completed step: <§5 step k>        Next step: <§5 step k+1>        Last u
 
 > The three run targets, named: who, on what machine, with what layout. What is in scope; what is explicitly out and which issue tracks it. Which documents this audit produces or revises (A, B, this C).
 
-Example (GFISHER): "1. Holden can run it (Windows 11, R 4.5.1, RStudio). 2. Dave can still run it with his existing paths and habits. 3. Any new GitHub user can run it, accepting that the geodatabase and survey CSVs cannot live on GitHub. Whether the basemap stage belongs in this repository is issue #3 and out of scope here."
+Example (GFISHER): "1. [analyst] can run it (Windows 11, R 4.5.1, RStudio). 2. [author] can still run it with their existing paths and habits. 3. Any new GitHub user can run it, accepting that the geodatabase and survey CSVs cannot live on GitHub. Whether the basemap stage belongs in this repository is issue #3 and out of scope here."
 
 ## 2. Findings register
 
@@ -115,9 +115,9 @@ Example (GFISHER R5): "Found by the baseline run: 14 cells differ by one station
 
 > Numbered, dated, owned. One line each; the discussion lives in the issue, so link it. List the findings a decision affects.
 
-1. **1 Oct 2026 (Holden):** Review the rework branch rather than `main` alone. (scope)
-2. **1 Oct 2026 (Holden):** Seed the stage 2 draws with `seed = 1`, overridable in the local config. (R1; behavioural)
-6. **2 Oct 2026 (Holden):** Ship the four public substrate grids in `data/` with a provenance note after the source server proved unreachable. (R6)
+1. **1 Oct 2026 ([analyst]):** Review the rework branch rather than `main` alone. (scope)
+2. **1 Oct 2026 ([analyst]):** Seed the stage 2 draws with `seed = 1`, overridable in the local config. (R1; behavioural)
+6. **2 Oct 2026 ([analyst]):** Ship the four public substrate grids in `data/` with a provenance note after the source server proved unreachable. (R6)
 
 ## 8. Needs examination (for the original author)
 

@@ -1,12 +1,12 @@
 # Vignette: a review-only audit of EcospaceBasemap, then the local steps
 
-This is a curated record of one real run of `/code-audit`, made on 6 October 2026 in a cloud Claude Code session that had no R installed, against `WFS-FEM/EcospaceBasemap` at commit `3d97024` (the state after the author's five module commits and the reviewer's portability pull request). It shows what the skill asks, what it writes at each phase, what the analyst says at each pause, and what the local machine does afterwards. Excerpts are verbatim from the documents the run produced, trimmed for length.
+This is a curated record of one real run of `/code-audit`, made on 6 October 2026 in a cloud Claude Code session that had no R installed, against `WFS-FEM/EcospaceBasemap` at commit `3d97024` (the state after the author's five module commits and the reviewer's portability pull request). It shows what the skill asks, what it writes at each phase, what the analyst says at each pause, and what the local machine does afterwards. Excerpts are verbatim from the documents the run produced, trimmed for length, with names of people replaced by their roles: `[analyst]` (the person running the audit) and `[author]` (the original author of the code).
 
 The repository is small (one driver, nine function files, 63 functions) and had already been through one review, so this is a realistic second look rather than a first contact.
 
 ## 1. The setting, and why review-only first
 
-The analyst asked for a review-only pass: "no GitHub writes, no commits, and R is not installed on this machine, so don't try to run anything. I want the three review documents ... and tell me which findings you would send to Dave rather than fix." Review-only is the right first mode when you want to see what the audit would find before committing to an issue and a branch, and it is the only mode a session without the runtime can complete on its own. The skill detected the WFS-FEM org profile from the remote owner and the degraded mode from the missing runtime.
+The analyst asked for a review-only pass: "no GitHub writes, no commits, and R is not installed on this machine, so don't try to run anything. I want the three review documents ... and tell me which findings you would send to [author] rather than fix." Review-only is the right first mode when you want to see what the audit would find before committing to an issue and a branch, and it is the only mode a session without the runtime can complete on its own. The skill detected the WFS-FEM org profile from the remote owner and the degraded mode from the missing runtime.
 
 ## 2. Phase 1: the setup interview
 
@@ -17,7 +17,7 @@ Confirm mode review-only and org profile WFS-FEM? Assumed yes (the task says rev
   no GitHub writes, no commits; the remote owner is WFS-FEM).
 Analyst's machine (OS, R version)? Unknown; recorded as pending in Doc C §1 and Doc B §2.4
   (Windows and R 4.x assumed from the config example and the README's "R >= 4.4").
-What counts as reference outputs? Assumed: the author's legacy grids on his machine, the README
+What counts as reference outputs? Assumed: the author's legacy grids on their machine, the README
   verification table (:753-769) and the ten docs/img/ figures; no output is tracked
   (recorded as finding R4).
 Scope limits? Assumed whole repository; the Python digitising step and the legacy repositories
@@ -51,9 +51,9 @@ Review-only skips the GitHub scaffold. Doc C's status block records that explici
 ```
 Issue: none (review-only)        Branch: none (tree at claude/pensive-feynman-bvssdu, identical to main)        Pull request: none
 Mode: review-only, degraded (no R runtime, no GitHub writes)        Org profile: WFS-FEM
-Reviewer: Holden Harris, with Claude Code        Original author: David Chagaris
+Reviewer: [analyst], with Claude Code        Original author: [author]
 Line numbers refer to commit: 3d97024 (main, 2 Oct 2026, "Merge pull request #1 from WFS-FEM/feature/portable-data-setup")
-Last completed step: Phase 6 (triage and fix design), provisional        Next step: Pause 5 with Holden: one status per row; then Phase 3 if the audit proceeds
+Last completed step: Phase 6 (triage and fix design), provisional        Next step: Pause 5 with [analyst]: one status per row; then Phase 3 if the audit proceeds
 ```
 
 Had the analyst chosen `audit`, Pause 3 would have shown the issue body (the WFS-FEM task template fields: objective, product, stakeholder group, lead, context, acceptance criteria), the branch name `N-review-ecospacebasemap-repo` and the draft pull request body with `Fixes #N`, and waited for a yes before writing anything to GitHub.
@@ -91,24 +91,24 @@ And two from the methods lens, which is where the `scientific` kind does its wor
 | M3 | make_WFS_basemaps.R:177,179 with R/GFISHER functions.R:40-47,112-132,301-302,310-314,491 | anchor.zero = 'both' adds synthetic zero observations at every land cell and every cell deeper than max.depth to the IDW training set (the roxygen measured it: NL filled mean 0.0118 -> 0.0049 at 5 min), and max.depth.hab = 200 stops the fill at 200 m although the domain runs to 500 m ... Both are chosen to match the old maps (:314). Whether to keep either is the author's call | scientific | medium | author (proposed) |
 ```
 
-The run found 40 rows across the eight lenses, with `file:line` on every one. The answer to the analyst's direct question ("which findings would you send to Dave") fell straight out of the Kind column: the eight M rows go to the author with the arithmetic untouched; two behavioural items (dropped NA-relief records, the fallback that loses settings) need his confirmation because outputs change; everything mechanical (paths, guards, dead code, documentation, the second-run failure, the live download with no cache) can be fixed with identical-output evidence.
+The run found 40 rows across the eight lenses, with `file:line` on every one. The answer to the analyst's direct question ("which findings would you send to [author]") fell straight out of the Kind column: the eight M rows go to the author with the arithmetic untouched; two behavioural items (dropped NA-relief records, the fallback that loses settings) need the author's confirmation because outputs change; everything mechanical (paths, guards, dead code, documentation, the second-run failure, the live download with no cache) can be fixed with identical-output evidence.
 
-Pause 5 is the long conversation: one status per row, in lens order. A typical exchange on this repository: "P1 to P4, fix. R1, fix, cache the bathymetry. B2, ask Dave first and size it from the data. M1 to M8, to Dave as decision issues. E5, won't fix, keep the CSV whole."
+Pause 5 is the long conversation: one status per row, in lens order. A typical exchange on this repository: "P1 to P4, fix. R1, fix, cache the bathymetry. B2, ask [author] first and size it from the data. M1 to M8, to [author] as decision issues. E5, won't fix, keep the CSV whole."
 
 ## 7. Phase 6: fix design and the decisions log
 
 Doc C §4 lists the configuration keys the fixes introduce (`dir.bathy`, `seed.ar`, `stop.on.qc`), the setup checks, one line of code change per finding with its backward-compatibility note, the housekeeping moves, and the constraints. §7 is the decisions skeleton; in a live session each "pending" becomes a dated, owned line at Pause 5 or in the issue:
 
 ```
-1. 6 Oct 2026 (Holden, by instruction): Review-only pass; documents written to the named outputs folder, not into the repository; no GitHub writes, no commits, no run. (scope)
-3. pending (Holden with Dave): Track the deliverable grids (output/5min/**/*.asc, the two sum-1 CSVs and the port assignment CSVs, about 70 small files) so a rebuild shows in git diff and a fresh clone has a reference; or keep outputs out of the repository and name where the reference copy lives. (R4; mechanical; housekeeping commit either way)
-5. pending (Dave, Holden): Fix the NA-relief drop in fn.fill_reef_relief(); outputs change for every structure that currently inherits NA relief. Needs the count from the data first. (B2; behavioural)
-10. pending (Dave): M1, M3, M4, M5, M6, M7, M8 each need a [Decision] issue per the WFS-FEM profile; the arithmetic stays as it is until the outcome is filled in. (§8)
+1. 6 Oct 2026 ([analyst], by instruction): Review-only pass; documents written to the named outputs folder, not into the repository; no GitHub writes, no commits, no run. (scope)
+3. pending ([analyst] with [author]): Track the deliverable grids (output/5min/**/*.asc, the two sum-1 CSVs and the port assignment CSVs, about 70 small files) so a rebuild shows in git diff and a fresh clone has a reference; or keep outputs out of the repository and name where the reference copy lives. (R4; mechanical; housekeeping commit either way)
+5. pending ([author], [analyst]): Fix the NA-relief drop in fn.fill_reef_relief(); outputs change for every structure that currently inherits NA relief. Needs the count from the data first. (B2; behavioural)
+10. pending ([author]): M1, M3, M4, M5, M6, M7, M8 each need a [Decision] issue per the WFS-FEM profile; the arithmetic stays as it is until the outcome is filled in. (§8)
 ```
 
-§8, "needs examination", gives the author what he needs to decide without re-deriving anything. For M1:
+§8, "needs examination", gives the author what they need to decide without re-deriving anything. For M1:
 
-> FWC publishes `Relief` in feet; `fn.make_AR_maps()` multiplies footprint area by it as metres (`R/artificial_reef_functions.R:376,403`), and the roxygen and README describe a median of "8 m". ... Options: (a) convert at read time (`relief * 0.3048`), which scales the AR index by one constant and leaves the Low/Medium/High classes unchanged, then regenerate and document the index as metre-weighted; (b) keep the arithmetic and document the index as feet-weighted, with the inflation factor stated as the stored median; (c) switch to `weight.by.relief = FALSE` for a genuine covered fraction (README `:505` calls this "arguably the more defensible layer"). Not changed, so outputs stay comparable with the verified grids. Needs: Dave's choice; one run with the chosen option; the before/after table of AL/AM/AH means.
+> FWC publishes `Relief` in feet; `fn.make_AR_maps()` multiplies footprint area by it as metres (`R/artificial_reef_functions.R:376,403`), and the roxygen and README describe a median of "8 m". ... Options: (a) convert at read time (`relief * 0.3048`), which scales the AR index by one constant and leaves the Low/Medium/High classes unchanged, then regenerate and document the index as metre-weighted; (b) keep the arithmetic and document the index as feet-weighted, with the inflation factor stated as the stored median; (c) switch to `weight.by.relief = FALSE` for a genuine covered fraction (README `:505` calls this "arguably the more defensible layer"). Not changed, so outputs stay comparable with the verified grids. Needs: [author]'s choice; one run with the chosen option; the before/after table of AL/AM/AH means.
 
 ## 8. Phases 7 to 9: what happens on the analyst's machine
 
@@ -128,10 +128,10 @@ Nothing below happened in this run; it is what the `audit` mode does next, shown
 | 2 | After orientation | "That's the pipeline. Section 5's digitising step is Python and out of scope." |
 | 3 | Before GitHub writes | "Issue title fine; branch fine; open the draft." |
 | 4 | Before the baseline | "Run it; expect about 15 minutes; I'll paste the log." |
-| 5 | After the registers | "P1-P4 fix. R1 fix. B2 ask Dave. M1-M8 to Dave. E5 won't fix." |
+| 5 | After the registers | "P1-P4 fix. R1 fix. B2 ask [author]. M1-M8 to [author]. E5 won't fix." |
 | 6 | After fix design | "Plan approved. Run through step 4, then show me." |
 | 7-9 | During implementation | "Go." / "Show me the before/after table first." |
-| 10 | Before ready | "Ready. Request Dave." |
+| 10 | Before ready | "Ready. Request [author]'s review." |
 
 ## 10. Time and cost
 

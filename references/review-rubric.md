@@ -9,7 +9,7 @@ Read this when Phase 5 begins, and for the smoke checks when Phase 4 begins. It 
 - Each row is `ID | Where (file:line) | Problem | Kind | Severity | Status`. IDs are the lens letter plus a number (P1, R2) and are never reused. Kind is mechanical, behavioural or scientific; Severity is high, medium or low; Status is `open`, `fix: step k`, `author`, `issue #M` or `wontfix (decision n)`.
 - "None found; checked X, Y, Z" is a valid table body, because it tells the next reader what was looked at.
 - The Grep patterns are regexes for the Grep tool with a file glob. Exclude matches inside `https?://` URLs and in commented examples (the local config template's `# dir.data <- "C:/..."` lines) before counting a hit. The local commands are base R or the skill's four scripts: `<skill>/scripts/static_sweep.R`, `snapshot_md5.R`, `run_logged.R`, `session_capture.R`.
-- Example rows come from three repositories cloned beside this skill: EcospaceBasemap (commit `3d97024`), GFISHER (`62f7a08`; pre-fix lines are marked `@3e4dea1` and read with `git show 3e4dea1:<path>`, and "plan doc" is its `docs/issue2-review-gfisher-repo-plan.md`) and RedTideMaps (`a875d64`). Status cells follow the repository's own review document where one records them and are illustrative otherwise.
+- Example rows come from three repositories cloned beside this skill: EcospaceBasemap (commit `3d97024`), GFISHER (`62f7a08`; pre-fix lines are marked `@3e4dea1` and read with `git show 3e4dea1:<path>`, and "plan doc" is its `docs/issue2-review-gfisher-repo-plan.md`) and RedTideMaps (`a875d64`). Status cells follow the repository's own review document where one records them and are illustrative otherwise. Login names and institutions inside quoted code are replaced by placeholders such as `<author>`.
 
 ## Contents
 
@@ -67,11 +67,11 @@ Asks: will it run on another machine? Feeds Doc B §2.
 
 | ID | Where (file:line) | Problem | Kind | Severity | Status |
 |---|---|---|---|---|---|
-| P1 | GFISHER `process GFISHER data.R:26` @3e4dea1 | `dir.ecospace.maps <- "C:/Users/dchagaris/OneDrive - University of Florida/.../Ecospace/maps"`; required by stage 1 | mechanical | high | fix: step 3 |
+| P1 | GFISHER `process GFISHER data.R:26` @3e4dea1 | `dir.ecospace.maps <- "C:/Users/<author>/OneDrive - <institution>/.../Ecospace/maps"`; required by stage 1 | mechanical | high | fix: step 3 |
 | P3 | GFISHER `process GFISHER data.R:1,105` @3e4dea1 | `rm(list=ls());rm(.SavedPlots);graphics.off();gc();windows(record=T)`: wipes the workspace, warns when `.SavedPlots` is absent, fails off Windows | mechanical | medium | fix: step 3 |
 | P5 | GFISHER `docs/issue5_seed_experiment.R:4,6` | `setwd('C:/Repos/WFS-FEM/GFISHER')` and `E <- 'C:/Users/User/AppData/Local/Temp/gfisher_baseline/exp_issue5'` in a tracked experiment script, although `CLAUDE.md:22` says machine-specific paths never go in tracked files | mechanical | low | open |
 | P2 | EcospaceBasemap `make_WFS_basemaps.R:12` | `rm(list=ls());graphics.off();gc()` opens the driver, so sourcing it from another script loses that script's state; the anchor check at `:19-21` is the pattern to keep | mechanical | low | open |
-| P4 | RedTideMaps `scripts/old scripts/polygon_clipping_rt.R:18-25` | `if (user == "dchagaris") { wd <- "C:/Users/dchagaris/OneDrive - ..." } else if (user == "dvilasgonzalez") {...}`: paths branch on the login name and a third user gets `choose.dir()`; superseded file, so the fix is the move in E4 | mechanical | low | open |
+| P4 | RedTideMaps `scripts/old scripts/polygon_clipping_rt.R:18-25` | `if (user == "<author>") { wd <- "C:/Users/<author>/OneDrive - ..." } else if (user == "<second user>") {...}`: paths branch on the login name and a third user gets `choose.dir()`; superseded file, so the fix is the move in E4 | mechanical | low | open |
 
 ## R reproducibility
 

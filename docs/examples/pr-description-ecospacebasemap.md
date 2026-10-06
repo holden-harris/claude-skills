@@ -1,10 +1,10 @@
 # Example: a pull request description (EcospaceBasemap, pull request #1, September 2026)
 
-Source: https://github.com/WFS-FEM/EcospaceBasemap/pull/1, "Make EcospaceBasmap pipeline generalizable (runnable by Holden or anyone)". This is the model for `assets/pr-description.md`. The body is reproduced in full (lightly reflowed); commentary follows.
+Source: https://github.com/WFS-FEM/EcospaceBasemap/pull/1, "Make EcospaceBasmap pipeline generalizable (runnable by [analyst] or anyone)". This is the model for `assets/pr-description.md`. The body is reproduced in full (lightly reflowed, with names of people replaced by their roles `[analyst]` and `[author]`); commentary follows.
 
 ---
 
-Hey Dave. I have it set up that I can run this repo and everything looks good.
+Hey [author]. I have it set up that I can run this repo and everything looks good.
 
 Next, I wanted to use this as a test-case of making a generalizable work flow so anyone can do it, including updating your original code. This is the first time I've tried making a pull request.
 

@@ -1,6 +1,6 @@
 # Example: a full audit (GFISHER, issue #2, pull request #4, October 2026)
 
-Source: `docs/issue2-review-gfisher-repo-plan.md` in https://github.com/WFS-FEM/GFISHER (451 lines). It predates this skill and is the single document that the skill's Document C generalises; its evidence sections became Doc B §9. Excerpts below are verbatim; commentary follows each.
+Source: `docs/issue2-review-gfisher-repo-plan.md` in https://github.com/WFS-FEM/GFISHER (451 lines). It predates this skill and is the single document that the skill's Document C generalises; its evidence sections became Doc B §9. Excerpts below are verbatim except that names of people are replaced by their roles, `[analyst]` (the person running the audit) and `[author]` (the original author of the code); commentary follows each.
 
 ## The opening pins everything
 
@@ -8,7 +8,7 @@ Source: `docs/issue2-review-gfisher-repo-plan.md` in https://github.com/WFS-FEM/
 # GFISHER issue #2: Review GFISHER repo
 
 Date opened: 1 Oct 2026. Branch: `2-review-gfisher-repo`. Pull request: #4 (draft).
-Authors: Holden Harris, with Claude Code. Original code author: David Chagaris.
+Authors: [analyst], with Claude Code. Original code author: [author].
 
 Sections 1 to 4 describe what was found. Sections 5 to 8 are the work plan. Section 9 logs
 decisions as they are made. This file is updated as the work proceeds and travels with the PR.
@@ -19,8 +19,8 @@ What to notice: branch, pull request, both authors and the document's own rules 
 ## The three standing goals
 
 ```
-1. Holden can run it (Windows 11, R 4.5.1, RStudio).
-2. Dave can still run it with his existing paths and habits.
+1. [analyst] can run it (Windows 11, R 4.5.1, RStudio).
+2. [author] can still run it with their existing paths and habits.
 3. Any new GitHub user can run it, accepting that the geodatabase and survey CSVs cannot
    live on GitHub.
 ```
@@ -30,7 +30,7 @@ Every findings category in the document says which goal it blocks ("Portability 
 ## Findings as tables with IDs and `file:line`
 
 ```
-| P1 | `process GFISHER data.R:26` | `dir.ecospace.maps` hardcoded to Dave's OneDrive. Required by stage 1 (seagrass layer). |
+| P1 | `process GFISHER data.R:26` | `dir.ecospace.maps` hardcoded to [author]'s OneDrive. Required by stage 1 (seagrass layer). |
 | P3 | `process GFISHER data.R:1,105` | `rm(list=ls()); rm(.SavedPlots); windows(record=T)`: wipes the user's workspace, warns when `.SavedPlots` is absent, fails off Windows or under `Rscript`. |
 | R1 | `R/video_dataset.R:161-169` | `rtruncnorm` and `sample.int` draw random lengths with no `set.seed`, so stage 2 and everything downstream (MaxN maps, affinities) differ on every run. |
 | B4 | `R/maxn_maps.R` | `save.format` argument is accepted but ignored (always writes ASCII). Header says `fun='sum'`; the driver passes `mean`. |
@@ -62,15 +62,15 @@ What to notice: the environment line above it (OS, R version, package versions),
 | 7 single-stanza maps | identical across seeds |
 ```
 
-"So the seed changes exactly one thing ... Nothing is gained or lost." And then the honest reading: "`set.seed()` makes the stanza maps reproducible but does not make them less noisy." The ten-seed experiment that followed (section 4.1c) ends with three options and the sentence "which is appropriate is a modelling judgement for Dave", tracked in issue #5. That is the skill's `scientific` kind in action: measured, documented, handed over, arithmetic unchanged.
+"So the seed changes exactly one thing ... Nothing is gained or lost." And then the honest reading: "`set.seed()` makes the stanza maps reproducible but does not make them less noisy." The ten-seed experiment that followed (section 4.1c) ends with three options and the sentence "which is appropriate is a modelling judgement for [author]", tracked in issue #5. That is the skill's `scientific` kind in action: measured, documented, handed over, arithmetic unchanged.
 
 ## Acceptance criteria as commands
 
 ```
-- [x] `git grep -nE "dchagaris|OneDrive"` over `*.R` matches only comments in
+- [x] `git grep -nE "<author login>|OneDrive"` over `*.R` matches only comments in
       `config.local.example.R`. `git grep -n "windows("` matches nothing.
 - [x] `git ls-files --cached --ignored --exclude-standard` is empty (housekeeping commit).
-- [ ] Dave runs the branch with his `config.local.R` and confirms the outputs.
+- [ ] [author] runs the branch with their `config.local.R` and confirms the outputs.
 ```
 
 What to notice: each criterion can be re-run, and the last one is the author's and stays open. The skill widens the path grep (`[A-Za-z]:/|/Users/|/home/|OneDrive|AppData`), because this one missed two machine paths in the experiment script committed with the document.
@@ -78,8 +78,8 @@ What to notice: each criterion can be re-run, and the last one is the author's a
 ## Decisions, dated and owned
 
 ```
-2. **1 Oct 2026 (Holden):** Swap `xlsx` for `readxl`.
-6. **2 Oct 2026 (Holden):** Track the four raw dbSEABED grids in `data/dbseabed/` (copied
+2. **1 Oct 2026 ([analyst]):** Swap `xlsx` for `readxl`.
+6. **2 Oct 2026 ([analyst]):** Track the four raw dbSEABED grids in `data/dbseabed/` (copied
    byte-identical from EcospaceBasemap, provenance in `SOURCE.md`) after the CSDMS server
    proved unreachable (R6). The duplication with EcospaceBasemap is tidied under issue #3.
 ```

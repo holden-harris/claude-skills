@@ -12,7 +12,7 @@ Rules that keep it trustworthy:
 - Methods questions the audit raises go in §7 and in Doc C §8, and the arithmetic in the code stays as it is until the author decides.
 - Three to eight pages. Plain, precise prose; numbers in tables.
 
-Below, each section has a heading to copy, guidance in a blockquote (delete it when writing), and an example drawn from a real audit. The examples are illustrations of shape from other repositories; nothing in them is a fact about the repository being audited.
+Below, each section has a heading to copy, guidance in a blockquote (delete it when writing), and an example drawn from a real audit. The examples are illustrations of shape from other repositories; nothing in them is a fact about the repository being audited, and names of people in them are replaced by roles in square brackets.
 
 ---
 
@@ -25,8 +25,8 @@ Below, each section has a heading to copy, guidance in a blockquote (delete it w
 Example:
 
 ```
-Repository: WFS-FEM/GFISHER (main at 3e4dea1). Original author: David Chagaris.
-Reviewers: Holden Harris, with Claude Code. Date: 1 Oct 2026. Status: draft, for the author's review.
+Repository: WFS-FEM/GFISHER (main at 3e4dea1). Original author: [author].
+Reviewers: [analyst], with Claude Code. Date: 1 Oct 2026. Status: draft, for the author's review.
 Version history: 2026-10-01 first draft (issue #2).
 ```
 

@@ -2,7 +2,7 @@
 
 For repositories under the GitHub organisation **WFS-FEM** (RedTideMaps, GFISHER, EcospaceBasemap, the private EwE input repositories) and the planning repository WFS-FEM/Ops. Detect by the remote owner `WFS-FEM`; confirm with the user in Phase 1. The code repositories have no `.github/ISSUE_TEMPLATE/` of their own; the templates live in Ops (`.github/ISSUE_TEMPLATE/task.yml`, `decision.yml`, `meeting.yml`), and the conventions below come from the Ops README, Ops `docs/decisions.md`, and GFISHER's `CLAUDE.md` and README "For collaborators".
 
-The usual people: the original code author is Dave Chagaris; the analyst running audits is Holden Harris; the Lead field takes `Holden`, `Dave` or `Other`.
+Roles: the original author of the code is usually the person whose machine layout the defaults match; the analyst running the audit is whoever invokes the skill. The Task form's Lead field is a dropdown of team members plus `Other`; pick the person running the audit.
 
 | Field | Value |
 |---|---|
@@ -13,7 +13,7 @@ The usual people: the original code author is Dave Chagaris; the analyst running
 | Sub-issues | Methods questions (Doc C §8) become sub-issues of the audit issue in the same repository (GFISHER #2 had #3 and #5) |
 | Decision issues | For a decision that affects a method or a shared convention, a `[Decision]` issue (Ops template `decision.yml`, label `decision`) with the fields below; the outcome is summarised in Ops `docs/decisions.md` |
 | Branch | `N-short-description`, created from the issue's Development sidebar (`2-review-gfisher-repo`, `3-polygon-clipping-issues`) |
-| Pull request | Draft against `main`; body carries `Fixes #N`, the acceptance checklist and a note for Dave; ready at Phase 9 with Dave requested as reviewer |
+| Pull request | Draft against `main`; body carries `Fixes #N`, the acceptance checklist and a note for the original author; ready at Phase 9 with the original author requested as reviewer |
 | Commit subject | Imperative, `(issue #N)` at the end |
 | Commit split | `code` / `docs` / `outputs` / `housekeeping`, plus this skill's `record` |
 | Trailer | `Co-Authored-By: Claude <model> <noreply@anthropic.com>` when Claude co-authored (for example `Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>`) |
@@ -32,10 +32,10 @@ Fill these in the issue body, in this order, then set the matching project field
 | Objective | `I. Automation`, `II. Integration`, `III. Communication`, `PM (project management)`. An audit is usually III (documented, replicable) or I |
 | Product(s) | `A. EwE model update`, `B. SEDAR Mrt`, `C. Shiny App`, `D. R package`, `E. IEA/ESR`, `F. Peer-reviewed paper`, `G. Report`, `H. Other` (multi-select) |
 | Stakeholder group(s) | `A. SEFSC Gulf Fisheries Branch / SEDAR`, `B. Gulf IEA / ESR`, `C. Fisheries managers`, `D. Ecosystem modelers`, `E. Science community`, `F. Fishers and public`, `G. Funder (NOAA RESTORE reporting)`, `H. Other` (multi-select) |
-| Lead | `Holden`, `Dave`, `Other` |
+| Lead | The team-member dropdown (the analyst running the audit), or `Other` |
 | Context | Why this matters and where it comes from (cite the paper, working paper or meeting); for an audit, the Doc A §1-3 summary and the three run targets |
 | Acceptance criteria | A checklist; becomes Doc C §9 and the PR body |
-| External partner(s), if any | Free text (FWRI, the Hu lab, SEFSC analysts) |
+| External partner(s), if any | Free text (the agency or lab that provides data or reviews the work) |
 
 Project fields to set in the sidebar: Objective, Stakeholder group, Product, Priority (P0 to P3), Phase (the quarter the item should finish), Target date, Lead, External partner(s). Product, Stakeholder group and Lead are the three to set on every issue.
 
@@ -56,4 +56,4 @@ Add a line at merge (Phase 9) for each decision that affects a method or a share
 
 ## What the audit documents cite
 
-GFISHER `CLAUDE.md` states the house rules the P and R lenses check in every WFS-FEM repository: machine-specific paths never go in tracked files (defaults repo-relative, overrides in gitignored `config.local.R`, documented key by key in `config.local.example.R`); three people must be able to run the same tracked code (the author with his layout, Holden, a fresh clone); nothing Windows-only or interactive-only runs unguarded; random draws are seeded; commits are split by type with `(issue #N)` in the subject. Where the audited repository lacks one of these, that is a finding, and the fix follows the GFISHER and RedTideMaps shape so the repositories stay alike.
+GFISHER `CLAUDE.md` states the house rules the P and R lenses check in every WFS-FEM repository: machine-specific paths never go in tracked files (defaults repo-relative, overrides in gitignored `config.local.R`, documented key by key in `config.local.example.R`); three people must be able to run the same tracked code (the original author with their layout, the analyst, a fresh clone); nothing Windows-only or interactive-only runs unguarded; random draws are seeded; commits are split by type with `(issue #N)` in the subject. Where the audited repository lacks one of these, that is a finding, and the fix follows the GFISHER and RedTideMaps shape so the repositories stay alike.

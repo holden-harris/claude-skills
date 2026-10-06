@@ -1,6 +1,6 @@
 # Example: a targeted fix (RedTideMaps, issue #3, pull request #4, September 2026)
 
-Source: `docs/issue3-hull-fix-plan.md` in https://github.com/WFS-FEM/RedTideMaps (253 lines). One issue, one bug, a written diagnosis and plan before any code changed. It is the model for the skill's `fix` mode (Appendix 1 of the Document C template). Excerpts are verbatim; commentary follows each.
+Source: `docs/issue3-hull-fix-plan.md` in https://github.com/WFS-FEM/RedTideMaps (253 lines). One issue, one bug, a written diagnosis and plan before any code changed. It is the model for the skill's `fix` mode (Appendix 1 of the Document C template). Excerpts are verbatim except that names of people are replaced by their roles, `[analyst]` and `[author]`; commentary follows each.
 
 ## Diagnosis first, in one paragraph
 
@@ -52,7 +52,7 @@ A code sketch of the replacement (single-linkage clustering in base R, no new de
 
 ```
 1. `hull_link_km = 75` as the default, overridable in `config.local.R` (section 6.2). Report
-   50 km as the sensitivity case in the PR. Decided by Holden.
+   50 km as the sensitivity case in the PR. Decided by [analyst].
 ```
 
 ## Steps with pauses, and acceptance criteria on fingerprints

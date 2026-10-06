@@ -73,7 +73,7 @@ Local sessions use `gh`. Cloud sessions use the GitHub MCP tools, or `gh api` wi
 
 ## Cloud limitations
 
-- Another repository (the Ops repository for a decision-log line, a sibling repository that holds an input) must be attached to the session before it can be read or written. Ask for it to be attached rather than reporting that it cannot be reached.
+- Another repository (an organisation's planning repository for a decision-log line, a sibling repository that holds an input) must be attached to the session before it can be read or written. Ask for it to be attached rather than reporting that it cannot be reached.
 - Pushes are refused when the GitHub App is not installed for that repository. The remedy is on the user's side: install the app for the repository (github.com/apps/claude/installations/select_target) or reconnect GitHub in the claude.ai settings. Say so plainly; the skill then re-attaches the repository and continues, and the commits are safe locally in the meantime.
 - GraphQL-backed `gh` subcommands can fail behind the proxy; the table above gives the REST or MCP route for each.
 - Run steps cannot happen in the cloud at all; `<skill>/references/verification.md` has the hand-off text. GitHub writes still work, so the issue, branch and draft pull request are created as usual and the evidence arrives from the analyst's machine.
@@ -91,7 +91,7 @@ Local sessions use `gh`. Cloud sessions use the GitHub MCP tools, or `gh api` wi
 5. `Left out, deliberately:` when something was consciously not changed (the history rewrite the author has not decided on, the method that stays as it is), so nobody reads the omission as an oversight.
 6. The trailer lines the profile asks for.
 
-Three real commits from the GFISHER audit (WFS-FEM/GFISHER, issue #2), printed with `git log -1 --format='%s%n%n%b' <sha>`.
+Three real commits from the GFISHER audit (WFS-FEM/GFISHER, issue #2), printed with `git log -1 --format='%s%n%n%b' <sha>`; one data file name is generalised.
 
 **`code` commit with evidence (0299a4d):**
 
@@ -142,7 +142,7 @@ Untracked with git rm --cached (files stay on disk and in history):
     layer, input only to the retired two-geodatabase legacy function
   data/FWRI_East_Gulf_Mapping_2023.gdb                     125 MB, 2023 vintage of
     the two layers the current code reads from the 2026 geodatabase
-  data/Video Count Data4ChagarisTake2.xlsx                  14 MB, referenced only
+  data/<video count workbook>.xlsx                          14 MB, referenced only
     in a comment; superseded by the 3LABS CSVs
 Removed (in history if ever needed):
   data/size_at_age.csv        referenced by no code; stanza sizes come from the
