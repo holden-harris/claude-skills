@@ -1,0 +1,12 @@
+# `git archive` builds the distributable .skill package from a tagged commit:
+#   git archive --format=zip --prefix=code-audit/ -o code-audit.skill HEAD
+# Everything marked export-ignore stays in the repository but out of the package.
+evals/          export-ignore
+.gitattributes  export-ignore
+.gitignore      export-ignore
+.github/        export-ignore
+
+# Keep the R scripts and markdown LF on every platform so the package is byte-identical.
+*.R   text eol=lf
+*.md  text eol=lf
+*.json text eol=lf
