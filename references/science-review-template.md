@@ -20,7 +20,7 @@ Below, each section has a heading to copy, guidance in a blockquote (delete it w
 
 ## 0. Header
 
-> One block at the top. Repository and remote; the commit reviewed (line numbers elsewhere refer to it); original author(s); reviewer(s); date; status (draft, agreed with the author, superseded by <date>); how to cite this review; version history (one line per revision: date, what changed, which issue).
+> One block at the top. Repository and remote; the commit reviewed (line numbers elsewhere refer to it); original author(s); reviewer(s); date; status (draft, agreed with the author, superseded by <date>); how to cite this review; version history (one line per revision: date, what changed, which issue). The status line names the phase that last filled this document and is updated in every record commit that fills more of it. Where the document cites finding IDs (M3, R1), give the key once: the letter is the lens (P portability, R reproducibility, B bugs and fragility, D documentation, M methods and statistics, S stochasticity, T run time, E efficiency and artifacts) and the row lives in the findings log §2.
 
 Example:
 

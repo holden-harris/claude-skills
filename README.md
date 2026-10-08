@@ -65,6 +65,8 @@ Open Claude Code in the repository to audit and type `/code-audit`. The skill st
 | 8 Verify | Fresh clone, minimal config, independent run; every changed output explained | Before the PR is marked ready |
 | 9 Finish | Science and workflow reviews finalised; README sync; PR description; closing summary | Review request to the author |
 
+Every finding gets an ID made of a lens letter and a number (`P1`, `R2`): P portability, R reproducibility, B bugs and fragility, D documentation, M methods and statistics, S stochasticity, T run time, E efficiency and artifacts. The key is repeated in each review document and at the triage pause.
+
 Modes: `audit` (full), `fix` (one issue, short form of the findings log), `review-only` (documents and findings, no GitHub writes or commits), `resume`, `second audit` (a previous review was merged), `own past code` (you are the original author). The skill detects the likely mode and asks.
 
 To resume after an interruption, type `/code-audit` again in the same repository: it reads `docs/review/`, `git log` and `git status` and continues at the first unticked step of the findings log.

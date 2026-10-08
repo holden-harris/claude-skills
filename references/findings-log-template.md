@@ -46,7 +46,9 @@ Example (GFISHER): "1. [analyst] can run it (Windows 11, R 4.5.1, RStudio). 2. [
 > - **Severity**: `high` (blocks a run target or materially changes outputs), `medium` (wrong or fragile with a workaround), `low` (tidy-up, wording).
 > - **Status**: `open`, `fix: step k`, `author` (handed over in §8), `issue #M` (sub-issue opened), `wontfix (decision n)`.
 >
-> "None found; checked X, Y, Z" is a valid table body. Carry-overs from a previous audit keep a note of their origin in the Problem cell.
+> "None found; checked X, Y, Z" is a valid table body. Carry-overs from a previous audit keep a note of their origin in the Problem cell. Keep the key line below in the document: readers of §5 to §8, and of the other two documents, meet IDs without the register headings.
+
+Finding IDs are the lens letter plus a number, never reused: P portability, R reproducibility, B bugs and fragility, D documentation, M methods and statistics, S stochasticity, T run time, E efficiency and artifacts.
 
 ### 2.1 Portability (P)
 

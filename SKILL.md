@@ -142,7 +142,7 @@ Skipped in `review-only`. Pause 3 first: show the issue title and body, the bran
 
 ## Phase 4: smoke, then baseline
 
-**Smoke first, seconds not minutes.** Root anchor present; every source file parses (`<skill>/scripts/static_sweep.R` does this without executing anything); required packages installed; required inputs present. A failure here is a finding recorded in the findings log §2 under the lens it belongs to (P for the anchor and undeclared packages, B for files that do not parse, R for missing inputs) and fixed only after the baseline exists, unless it prevents any run at all (then record it, fix the minimum, and say so in the workflow review §9's baseline notes).
+**Smoke first, seconds not minutes.** Root anchor present; every source file parses (`<skill>/scripts/static_sweep.R` does this without executing anything); required packages installed; required inputs present. A failure here is a finding recorded in the findings log §2 under the lens it belongs to (P for the anchor and undeclared packages, B for files that do not parse, R for missing inputs) and fixed only after the baseline exists, unless it prevents any run at all (then record it, fix the minimum as a numbered decision with evidence that the fix changes no output, run the baseline on the fixed commit, and say so in the workflow review §9's baseline notes).
 
 Pause 4: tell the user how long the baseline is expected to take (from the README, comments or the author; say "unknown" if nothing says) and what it will touch; in degraded mode, hand off here.
 
@@ -175,7 +175,7 @@ One problem gets one ID; choose the lens by the fix that resolves it and cross-r
 
 Each register row: `ID | Where (file:line) | Problem | Kind | Severity | Status`. "None found; checked X, Y, Z" is a valid table body and more useful than silence.
 
-Pause 5: walk the user through the registers, one status per row: `fix`, `author`, `issue #M`, or `wontfix` with a decision number. This is the longest conversation of the audit; take it in lens order and let the user batch decisions.
+Pause 5: walk the user through the registers, one status per row: `fix`, `author`, `issue #M`, or `wontfix` with a decision number. This is the longest conversation of the audit; take it in lens order and let the user batch decisions. Open the pause with the lens key (P portability, R reproducibility, B bugs and fragility, D documentation, M methods and statistics, S stochasticity, T run time, E efficiency and artifacts) and present each lens as its own short table (ID, severity, the problem in one line, recommended status) under a heading that names the lens in full; never show the user a bare list of IDs. A documentation row that would rewrite a scientific statement (a result, a claim about a method) takes `author` first and becomes `fix` once the author has said which version is right.
 
 ## Phase 6: triage and fix design
 
@@ -228,6 +228,8 @@ Pause 10 before marking the pull request ready.
 - Nothing platform-only or interactive-only runs unguarded.
 - Experiment scripts committed with the documents take their paths from the config or arguments and reproduce the tables they are cited for.
 - When the user is terse, ask one question at a time; when they say "just do it", batch the pauses they named and keep the record exactly as full.
+- A finding ID shown to the user comes with its lens named in full at least once in the same message; the documents carry the lens key where IDs are first cited (the findings log §2, and §0 of the science review and the workflow review).
+- A `record` commit that fills sections of the science review or the workflow review also updates that document's §0 status, phase and version lines in the same commit, so no header claims an earlier phase than the body.
 
 ## Model and effort
 

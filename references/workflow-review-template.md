@@ -20,7 +20,7 @@ Below, each section has a heading to copy, guidance in a blockquote (delete it w
 
 ## 0. How to read this document
 
-> Who it is for; the plain-language promise; the document map (the science review for the science, this document for running and maintaining, the findings log for the audit record and decisions); the commit the line numbers refer to; last updated. Write this section last.
+> Who it is for; the plain-language promise; the document map (the science review for the science, this document for running and maintaining, the findings log for the audit record and decisions); the commit the line numbers refer to; last updated. Write this section last. Include the key to the finding IDs this document cites: the letter is the lens (P portability, R reproducibility, B bugs and fragility, D documentation, M methods and statistics, S stochasticity, T run time, E efficiency and artifacts) and the row lives in the findings log §2. While the document is a draft, say which phase filled which sections, and update that line in every record commit that fills more of it.
 
 ## 1. The pipeline in one page
 
