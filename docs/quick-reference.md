@@ -6,15 +6,17 @@ One page for the second and later uses. The full rules are in `SKILL.md`; the te
 
 | # | Phase | Output | Pause |
 |---|---|---|---|
-| 1 | Setup interview | findings log §0-1; mode; org profile; local or degraded | 1 confirm scope |
-| 2 | Orientation | science review §1-5 draft; workflow review §1-2 draft | 2 "is this what the code does?" |
-| 3 | GitHub scaffold | issue, branch `N-slug`, findings log created, science and workflow reviews committed (docs), draft PR `Fixes #N` | 3 before the first write |
-| 4 | Smoke, then baseline | workflow review §9 as-found; record commit | 4 before the long run |
-| 5 | Review (8 lenses) | findings log §2 registers; workflow review §3-8; science review §5-7 corrections | 5 triage per row |
-| 6 | Fix design | findings log §4-5, §7 | 6 approve the commit plan |
-| 7 | Implement | one findings log §5 step per commit; findings log §6 change log | 7 each commit; 8 before regenerating outputs; 9 before destructive git |
-| 8 | Verify | workflow review §9 as-left; findings log §9 ticked; record commit | 10 before marking ready |
+| 1 | Setup interview | findings log §0-1; mode; org profile; local or degraded | 1 scope: confirm the scope |
+| 2 | Orientation | science review §1-5 draft; workflow review §1-2 draft | 2 orientation check: "is this what the code does?" |
+| 3 | GitHub scaffold | issue, branch `N-slug`, findings log created, science and workflow reviews committed (docs), draft PR `Fixes #N` | 3 scaffold: before the first write |
+| 4 | Smoke, then baseline | workflow review §9 as-found; record commit | 4 baseline go-ahead: before the long run |
+| 5 | Review (8 lenses) | findings log §2 registers; workflow review §3-8; science review §5-7 corrections | 5 triage: one status per row |
+| 6 | Fix design | findings log §4-5, §7 | 6 commit plan: approve it |
+| 7 | Implement | one findings log §5 step per commit; findings log §6 change log | 7 commit: each commit; 8 outputs regeneration: before regenerating outputs; 9 destructive git: before `git rm --cached`, a history rewrite or a force push |
+| 8 | Verify | workflow review §9 as-left; findings log §9 ticked; record commit | 10 ready for review: before marking ready |
 | 9 | Finish | science review §6-7 final; README sync; PR description; findings log §11 | |
+
+Every pause message opens with `Pause k of 10, <name> (Phase n of 9, <phase name>). You decide: <what>. Next: pause k+1, <name>.`
 
 ## Modes
 

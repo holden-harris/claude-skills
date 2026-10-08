@@ -55,15 +55,17 @@ Open Claude Code in the repository to audit and type `/code-audit`. The skill st
 
 | Phase | What happens | You decide |
 |---|---|---|
-| 1 Setup | Interview; mode and org profile chosen | Confirm the scope |
-| 2 Orientation | Reads the code; drafts science review §1-5 and workflow review §1-2 | "Is this what the code does?" |
-| 3 GitHub scaffold | Issue, branch, findings log created, draft PR | Approve the first GitHub writes |
-| 4 Smoke, then baseline | Quick checks; unmodified run; fingerprints of outputs | Start the long run (or run it yourself in degraded mode) |
-| 5 Review | Eight lenses; findings registers; workflow review §3-8 | Triage every finding: fix, hand to the author, sub-issue, or won't fix |
-| 6 Fix design | Recommended changes, commit plan, decisions | Approve the plan and how often to pause |
-| 7 Implement | One commit per step, evidence in each body | Each commit (or "run through step k") |
-| 8 Verify | Fresh clone, minimal config, independent run; every changed output explained | Before the PR is marked ready |
+| 1 Setup | Interview; mode and org profile chosen | Pause 1, scope: confirm the scope |
+| 2 Orientation | Reads the code; drafts science review §1-5 and workflow review §1-2 | Pause 2, orientation check: "Is this what the code does?" |
+| 3 GitHub scaffold | Issue, branch, findings log created, draft PR | Pause 3, scaffold: approve the first GitHub writes |
+| 4 Smoke, then baseline | Quick checks; unmodified run; fingerprints of outputs | Pause 4, baseline go-ahead: start the long run (or run it yourself in degraded mode) |
+| 5 Review | Eight lenses; findings registers; workflow review §3-8 | Pause 5, triage: one status per finding (fix, hand to the author, sub-issue, or won't fix) |
+| 6 Fix design | Recommended changes, commit plan, decisions | Pause 6, commit plan: approve the plan and how often to pause |
+| 7 Implement | One commit per step, evidence in each body | Pause 7, commit: each commit (or "run through step k"); pause 8, outputs regeneration; pause 9, destructive git |
+| 8 Verify | Fresh clone, minimal config, independent run; every changed output explained | Pause 10, ready for review: before the PR is marked ready |
 | 9 Finish | Science and workflow reviews finalised; README sync; PR description; closing summary | Review request to the author |
+
+Every pause message opens with a progress line, such as `Pause 5 of 10, triage (Phase 5 of 9, review). You decide: one status per row. Next: pause 6, commit plan.`, so the numbers never need looking up here.
 
 Every finding gets an ID made of a lens letter and a number (`P1`, `R2`): P portability, R reproducibility, B bugs and fragility, D documentation, M methods and statistics, S stochasticity, T run time, E efficiency and artifacts. The key is repeated in each review document and at the triage pause.
 

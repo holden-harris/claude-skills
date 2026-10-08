@@ -94,18 +94,20 @@ Finding IDs tie the documents together: they appear in the findings log's regist
 
 ## Pauses
 
-| Pause | Where | What the user decides |
-|---|---|---|
-| 1 | End of Phase 1 | The scope, mode and targets as played back |
-| 2 | End of Phase 2 | "Is this what the code does?" |
-| 3 | Start of Phase 3 | The issue, branch name and pull request body, before the first GitHub write |
-| 4 | Phase 4, before the baseline | Start the long run (or take the hand-off in degraded mode) |
-| 5 | End of Phase 5 | One status per finding row |
-| 6 | End of Phase 6 | The commit plan, and how often to pause in Phase 7 |
-| 7 | Phase 7, each commit | Unless the user chose "run through step k" |
-| 8 | Phase 7, before regenerating tracked outputs | The before/after table |
-| 9 | Phase 7, before `git rm --cached`, a history rewrite or a force push | The decision number and that nobody else has pulled the branch |
-| 10 | End of Phase 8 | Marking the pull request ready |
+| Pause | Name | Where | What the user decides |
+|---|---|---|---|
+| 1 | scope | End of Phase 1 | The scope, mode and targets as played back |
+| 2 | orientation check | End of Phase 2 | "Is this what the code does?" |
+| 3 | scaffold | Start of Phase 3 | The issue, branch name and pull request body, before the first GitHub write |
+| 4 | baseline go-ahead | Phase 4, before the baseline | Start the long run (or take the hand-off in degraded mode) |
+| 5 | triage | End of Phase 5 | One status per finding row |
+| 6 | commit plan | End of Phase 6 | The commit plan, and how often to pause in Phase 7 |
+| 7 | commit | Phase 7, each commit | Unless the user chose "run through step k" |
+| 8 | outputs regeneration | Phase 7, before regenerating tracked outputs | The before/after table |
+| 9 | destructive git | Phase 7, before `git rm --cached`, a history rewrite or a force push | The decision number and that nobody else has pulled the branch |
+| 10 | ready for review | End of Phase 8 | Marking the pull request ready |
+
+Every pause message opens with a progress line and uses the names above, so the user never has to look a number up: `Pause k of 10, <name> (Phase n of 9, <phase name>). You decide: <what>. Next: pause k+1, <name>.` A phase is always cited with its number and name ("Phase 5, review"), a pause with its number and name ("pause 5, triage"), and an implementation step with its number and its title from the findings log §5 ("step 4, the local config file").
 
 ## Phase 1: setup interview
 
@@ -120,7 +122,7 @@ Ask and record the answers in the findings log §0-1:
 7. Does a GitHub issue exist? Which org profile applies (`<skill>/references/org-profiles/`; detect from `.github/ISSUE_TEMPLATE/` and the remote owner, confirm with the user, `default.md` when none fits)?
 8. Mode and where this session runs.
 
-Pause 1: play the answers back in a few lines and confirm before reading code.
+Pause 1 (scope): play the answers back in a few lines and confirm before reading code.
 
 ## Phase 2: orientation
 
@@ -128,11 +130,11 @@ Read-only. Find the entry point(s), the order of operations, the configuration a
 
 Produce the first drafts of the science review §1-5 and the workflow review §1-2. Interview the author or the analyst for objectives and context the code cannot tell you, and cite where each statement comes from (file, README section, commit, paper, interview). Mark what the code does not explain as "unexplained" rather than guessing. In `review-only` mode, create the findings log now at the user's path.
 
-Pause 2: "Is this what the code does?" Misreadings caught here are cheap; caught in Phase 7 they cost commits.
+Pause 2 (orientation check): "Is this what the code does?" Misreadings caught here are cheap; caught in Phase 7 they cost commits.
 
 ## Phase 3: GitHub scaffold
 
-Skipped in `review-only`. Pause 3 first: show the issue title and body, the branch name and the pull request body, and wait for a yes.
+Skipped in `review-only`. Pause 3 (scaffold) first: show the issue title and body, the branch name and the pull request body, and wait for a yes.
 
 1. If no issue exists, create one from the org profile's template (`<skill>/assets/issue-body.md` when the repository has no templates): context, acceptance criteria as a checklist, labels.
 2. Create the branch from the issue (profile naming; default `N-slug`, where the slug is the same short phrase used in the findings log filename) and check it out.
@@ -144,7 +146,7 @@ Skipped in `review-only`. Pause 3 first: show the issue title and body, the bran
 
 **Smoke first, seconds not minutes.** Root anchor present; every source file parses (`<skill>/scripts/static_sweep.R` does this without executing anything); required packages installed; required inputs present. A failure here is a finding recorded in the findings log §2 under the lens it belongs to (P for the anchor and undeclared packages, B for files that do not parse, R for missing inputs) and fixed only after the baseline exists, unless it prevents any run at all (then record it, fix the minimum as a numbered decision with evidence that the fix changes no output, run the baseline on the fixed commit, and say so in the workflow review §9's baseline notes).
 
-Pause 4: tell the user how long the baseline is expected to take (from the README, comments or the author; say "unknown" if nothing says) and what it will touch; in degraded mode, hand off here.
+Pause 4 (baseline go-ahead): tell the user how long the baseline is expected to take (from the README, comments or the author; say "unknown" if nothing says) and what it will touch; in degraded mode, hand off here.
 
 **Baseline.** Run the unmodified code the way the author runs it:
 
@@ -175,13 +177,13 @@ One problem gets one ID; choose the lens by the fix that resolves it and cross-r
 
 Each register row: `ID | Where (file:line) | Problem | Kind | Severity | Status`. "None found; checked X, Y, Z" is a valid table body and more useful than silence.
 
-Pause 5: walk the user through the registers, one status per row: `fix`, `author`, `issue #M`, or `wontfix` with a decision number. This is the longest conversation of the audit; take it in lens order and let the user batch decisions. Open the pause with the lens key (P portability, R reproducibility, B bugs and fragility, D documentation, M methods and statistics, S stochasticity, T run time, E efficiency and artifacts) and present each lens as its own short table (ID, severity, the problem in one line, recommended status) under a heading that names the lens in full; never show the user a bare list of IDs. A documentation row that would rewrite a scientific statement (a result, a claim about a method) takes `author` first and becomes `fix` once the author has said which version is right.
+Pause 5 (triage): walk the user through the registers, one status per row: `fix`, `author`, `issue #M`, or `wontfix` with a decision number. This is the longest conversation of the audit; take it in lens order and let the user batch decisions. Open the pause with the lens key (P portability, R reproducibility, B bugs and fragility, D documentation, M methods and statistics, S stochasticity, T run time, E efficiency and artifacts) and present each lens as its own short table (ID, severity, the problem in one line, recommended status) under a heading that names the lens in full; never show the user a bare list of IDs. A documentation row that would rewrite a scientific statement (a result, a claim about a method) takes `author` first and becomes `fix` once the author has said which version is right.
 
-## Phase 6: triage and fix design
+## Phase 6: fix design
 
 Write the findings log §4 (recommended changes: configuration keys with defaults and purpose, setup checks, the code change per finding, housekeeping, alternatives considered, constraints such as "no new dependencies beyond X; existing function signatures keep working; OS and version"), the findings log §5 (the ordered implementation plan as checkboxes, each tagged with its commit type and the IDs it closes), and the findings log §7 (decisions so far, dated and owned). Methods questions become the findings log §8 entries and sub-issues.
 
-Pause 6: approve the commit plan. Ask which pauses the user wants in Phase 7 ("pause at every commit" or "run through step k, then show me").
+Pause 6 (commit plan): approve the commit plan. Ask which pauses the user wants in Phase 7 ("pause at every commit" or "run through step k, then show me").
 
 ## Phase 7: implement
 
@@ -192,9 +194,9 @@ Work the findings log §5 one step at a time:
 3. Update the findings log (tick the step, add the change-log row in §6, add any decision in §7) and the workflow review where behaviour or configuration changed.
 4. Check `git status` for data or output paths that should not be committed; never `git add -A` in a repository with large data.
 5. Commit as one type, subject in the profile's style (default: imperative, ending `(issue #N)`), body stating the problem, the change, the finding IDs and the evidence; add the trailer the profile asks for.
-6. Pause 7 at each commit unless the user chose otherwise.
+6. Pause 7 (commit) at each commit unless the user chose otherwise.
 
-Regenerating tracked outputs is its own `outputs` commit after pause 8, and its body carries the before/after table. Moves to `hoard/` or `archive/` are `housekeeping` commits that list every file. Pause 9 before any `git rm --cached`, history rewrite or force push.
+Regenerating tracked outputs is its own `outputs` commit after pause 8 (outputs regeneration), and its body carries the before/after table. Moves to `hoard/` or `archive/` are `housekeeping` commits that list every file. Pause 9 (destructive git) before any `git rm --cached`, history rewrite or force push.
 
 ## Phase 8: verify
 
@@ -206,7 +208,7 @@ The three run targets, recorded in the workflow review §9 (as-left):
 
 `<skill>/scripts/snapshot_md5.R compare` across the runs and against the baseline; every changed output has a cause in the table. Then the convention checks: `git grep -nE "\b[A-Za-z]:/|/Users/|/home/|OneDrive|AppData" -- '*.R' | grep -vE "https?://"` finds no machine paths outside commented examples; `git grep -n "windows(" -- '*.R'` is empty; `git ls-files -ci --exclude-standard` is empty. Tick the findings log §9 with the section that holds each piece of evidence; the last box is the author's sign-off and stays open. Commit as `record`.
 
-Pause 10 before marking the pull request ready.
+Pause 10 (ready for review) before marking the pull request ready.
 
 ## Phase 9: finish
 

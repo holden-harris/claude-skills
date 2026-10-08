@@ -28,7 +28,8 @@ Issue: #N (<link>)        Branch: N-<slug>        Pull request: #M (draft)
 Mode: audit | fix | review-only | resume | second audit        Org profile: <name>
 Reviewer: <name>, with Claude Code        Original author: <name>
 Line numbers refer to commit: <sha>
-Last completed step: <§5 step k>        Next step: <§5 step k+1>        Last updated: <date>
+Phase: <n> of 9, <name>        Last pause passed: <k>, <name>        Next pause: <k+1>, <name>
+Last completed step: <§5 step k, title>        Next step: <§5 step k+1, title>        Last updated: <date>
 ```
 
 ## 1. Scope and targets

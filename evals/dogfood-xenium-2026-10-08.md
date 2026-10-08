@@ -61,4 +61,6 @@
 2. A record commit that fills sections of the science review or the workflow review updates that document's §0 status, phase and version lines in the same commit (working rule).
 3. The Phase 4 rule for code that cannot run at all now says the minimum fix is a numbered decision with evidence that it changes no output, and that the baseline runs on the fixed commit.
 
+4. The ten pauses have names (scope, orientation check, scaffold, baseline go-ahead, triage, commit plan, commit, outputs regeneration, destructive git, ready for review). Every pause message opens with a progress line that gives the pause and the phase by number and name and names the next pause; steps are cited with their findings log §5 title; the findings log status block records the phase and the pauses passed. From the analyst's second request after the run: the numbers alone sent them back to the README.
+
 Open after this run: the baseline on the author's machine, and the analyst's triage at pause 5.
